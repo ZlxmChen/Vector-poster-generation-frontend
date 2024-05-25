@@ -447,7 +447,12 @@ canvasEditor.getMaterialType('ai').then((list: materialTypeI[]) => {
 });
 
 let intervalId;
-
+/**
+ * 选择模式
+ *
+ * @param mode 模式类型
+ * @returns 无返回值
+ */
 const choseMode = (mode: string) => {
   if (mode == '1') {
     if (genView.display == true || genView.percent > 0) {
@@ -496,6 +501,7 @@ const useTemplate = (template: materialItemI) => {
   genView.fg = template.fore;
   genView.bg = template.back;
   genView.isTemplate = true;
+  console.log(template);
 };
 
 const generatePoster = () => {
@@ -559,7 +565,12 @@ const dragItem = (event: Event) => {
   });
 };
 
-// 按照类型渲染
+/**
+ * 按照类型渲染
+ *
+ * @param e 事件对象
+ * @returns 无返回值
+ */
 const addItem = (e: Event) => {
   const target = e.target as HTMLImageElement;
   const url = target.src;
