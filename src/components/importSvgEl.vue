@@ -108,7 +108,7 @@ const filterTypeList = (value: string) => {
   if (!value) {
     state.materialist = cloneDeep(state.materialTypelist);
   } else {
-    // 当前分类详情
+    // 筛选出当前分类详情
     const materialTypeInfoList =
       state.materialTypelist.filter((item) => item.value === value) || [];
     state.materialist = materialTypeInfoList;
@@ -120,6 +120,7 @@ const filterTypeList = (value: string) => {
     // 按照搜索内容展示
     state.materialist = list.map((item) => {
       if (item.list) {
+        // 搜索细节
         item.list = item.list.filter((info) => info.label.includes(state.search));
       }
       return item;

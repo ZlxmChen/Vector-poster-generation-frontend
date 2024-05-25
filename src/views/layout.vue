@@ -4,7 +4,7 @@
       <n-layout-sider
         collapse-mode="width"
         :collapsed-width="15"
-        :width="240"
+        :width="300"
         :collapsed="collapsed"
         show-trigger
         @collapse="collapsed = true"
@@ -23,6 +23,7 @@
           </div>
         </div>
         <n-menu
+          class="menu"
           v-model:value="activeKey"
           :collapsed="collapsed"
           :collapsed-width="64"
@@ -38,8 +39,16 @@
 </template>
 
 <script setup>
-import { GameControllerOutline, BookOutline, PersonOutline, WineOutline } from '@vicons/ionicons5';
-
+import {
+  AlbumsOutline,
+  BookOutline,
+  PersonOutline,
+  WineOutline,
+  HomeOutline,
+  FileTrayFullOutline,
+  SettingsOutline,
+} from '@vicons/ionicons5';
+import { RouterLink } from 'vue-router';
 /**
  * 渲染图标组件
  *
@@ -52,81 +61,65 @@ function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) });
 }
 
-const activeKey = ref(''); // 当前激活的菜单项
+const activeKey = ref('go-back-home'); // 当前激活的菜单项
 const collapsed = ref(false); // 菜单是否收起
 // 菜单项
 const menuOptions = [
   {
-    label: '且听风吟',
-    key: 'hear-the-wind-sing',
-    icon: renderIcon(BookOutline),
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: '/home',
+          },
+        },
+        { default: () => '主页' }
+      ),
+    key: 'go-back-home',
+    icon: renderIcon(HomeOutline),
   },
   {
-    label: '1973年的弹珠玩具',
-    key: 'pinball-1973',
-    icon: renderIcon(BookOutline),
-    disabled: true,
-    children: [
-      {
-        label: '鼠',
-        key: 'rat',
-      },
-    ],
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: '/project',
+          },
+        },
+        { default: () => '项目' }
+      ),
+    key: 'go-project',
+    icon: renderIcon(AlbumsOutline),
   },
   {
-    label: '寻羊冒险记',
-    key: 'a-wild-sheep-chase',
-    disabled: true,
-    icon: renderIcon(BookOutline),
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: '/temmplate',
+          },
+        },
+        { default: () => '模板' }
+      ),
+    key: 'go-project',
+    icon: renderIcon(FileTrayFullOutline),
   },
   {
-    label: '舞，舞，舞',
-    key: 'dance-dance-dance',
-    icon: renderIcon(BookOutline),
-    children: [
-      {
-        type: 'group',
-        label: '人物',
-        key: 'people',
-        children: [
-          {
-            label: '叙事者',
-            key: 'narrator',
-            icon: renderIcon(PersonOutline),
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: '/settings',
           },
-          {
-            label: '羊男',
-            key: 'sheep-man',
-            icon: renderIcon(PersonOutline),
-          },
-        ],
-      },
-      {
-        label: '饮品',
-        key: 'beverage',
-        icon: renderIcon(WineOutline),
-        children: [
-          {
-            label: '威士忌',
-            key: 'whisky',
-          },
-        ],
-      },
-      {
-        label: '食物',
-        key: 'food',
-        children: [
-          {
-            label: '三明治',
-            key: 'sandwich',
-          },
-        ],
-      },
-      {
-        label: '过去增多，未来减少',
-        key: 'the-past-increases-the-future-recedes',
-      },
-    ],
+        },
+        { default: () => '设置' }
+      ),
+    key: 'go-project',
+    icon: renderIcon(SettingsOutline),
   },
 ];
 </script>
@@ -145,5 +138,8 @@ const menuOptions = [
   .avatar {
     margin-right: 20px;
   }
+}
+.menu {
+  margin-right: 20px;
 }
 </style>

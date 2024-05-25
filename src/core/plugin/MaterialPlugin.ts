@@ -8,6 +8,7 @@
 
 import { fabric } from 'fabric';
 import Editor from '../core';
+import {get, post} from '@/network/index';
 type IEditor = Editor;
 import axios from 'axios';
 
@@ -33,6 +34,13 @@ class MaterialPlugin {
     // console.log('getMaterialType', typeId);
     const url = this.apiMapUrl[typeId];
     const res = await axios.get(url, { params: { typeId } });
+    return res.data.data;
+  }
+
+  async getMaterialTypeHTTP(typeId: string) {
+    // console.log('getMaterialType', typeId);
+    const url = this.apiMapUrl[typeId];
+    const res = await get(url, { params: { typeId } });
     return res.data.data;
   }
 }

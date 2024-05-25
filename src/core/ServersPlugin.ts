@@ -44,6 +44,7 @@ class ServersPlugin {
     'dragAddItem',
     'clipboard',
     'saveJson',
+    'getCanvasData',
     'saveSvg',
     'saveImg',
     'clear',
@@ -117,6 +118,16 @@ class ServersPlugin {
       JSON.stringify(dataUrl, null, '\t')
     )}`;
     downFile(fileStr, 'json');
+  }
+
+  async  getCanvasData() {
+    const dataUrl = this.getJson();
+    // 把文本text转为textgroup，让导入可以编辑
+    await transformText(dataUrl.objects);
+    const fileStr = `data:text/json;charset=utf-8,${encodeURIComponent(
+      JSON.stringify(dataUrl, null, '\t')
+    )}`;
+    return fileStr;
   }
 
   saveSvg() {
