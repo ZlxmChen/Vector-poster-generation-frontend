@@ -171,7 +171,7 @@ import filters from '@/components/filters.vue';
 import history from '@/components/history.vue';
 import layer from '@/components/layer.vue';
 import attribute from '@/components/attribute.vue';
-
+import { useRoute } from 'vue-router';
 // 功能组件
 import { CanvasEventEmitter } from '@/utils/event/notifier';
 // import { downFile } from '@/utils/utils';
@@ -211,7 +211,7 @@ const state = reactive({
   select: null,
   ruler: false,
 });
-
+const route = useRoute();
 onMounted(() => {
   // 初始化fabric
   const canvas = new fabric.Canvas('canvas', {
@@ -245,6 +245,12 @@ onMounted(() => {
 
   event.init(canvas);
   state.show = true;
+
+  const command = JSON.parse(route.params.command);
+  if (command.height) {
+    console.log('router params hight: ' + command.height);
+    canvasEditor.setSize(command.width, command.height);
+  }
 });
 
 // 获取字体数据 新增字体样式使用

@@ -171,13 +171,17 @@ const slides = ref([
   { id: 15, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
 ]);
 
-// const setSize = () => {
-//   canvasEditor.setSize(1, 2);
-//   // canvas.editor.editorWorkspace.setSize(width.value, height.value);
-// };
-// const blankCanvasSetSize = () => {
-//   setSize();
-// };
+const blankCanvasSetSize = () => {
+  router.push({
+    name: 'editor',
+    params: {
+      command: JSON.stringify({
+        height: 240,
+        width: 240,
+      }),
+    },
+  });
+};
 </script>
 
 <style lang="scss" scoped>

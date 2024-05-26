@@ -95,7 +95,7 @@ let presetSize = reactive([
 ]);
 
 onMounted(() => {
-  canvasEditor.setSize(width.value, height.value);
+  //canvasEditor.setSize(width.value, height.value);
   canvasEditor.on('sizeChange', (w, h) => {
     width.value = w;
     height.value = h;
@@ -113,6 +113,7 @@ const setSizeBy = (w, h) => {
   modalData.height = h;
 };
 const setSize = () => {
+  console.log('setSize', width.value, height.value);
   canvasEditor.setSize(width.value, height.value);
   // canvas.editor.editorWorkspace.setSize(width.value, height.value);
 };

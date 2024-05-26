@@ -40,12 +40,15 @@
               :options="menuOptions"
             />
           </div>
-          <p style="text-align: center; margin-bottom: 20px; color: #666666">
+          <p
+            v-if="!collapsed"
+            style="white-space: nowrap; text-align: center; margin-bottom: 20px; color: #666666"
+          >
             Copyright © 2025 YIYAN
           </p>
         </div>
       </n-layout-sider>
-      <n-layout>
+      <n-layout style="margin-left: 10px">
         <RouterView />
       </n-layout>
     </n-layout>
@@ -71,6 +74,7 @@ import { RouterLink } from 'vue-router';
  */
 import { h, ref } from 'vue';
 import { NIcon } from 'naive-ui';
+
 function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) });
 }
@@ -152,8 +156,5 @@ const menuOptions = [
   .avatar {
     margin-right: 20px;
   }
-}
-.menu {
-  margin-right: 20px;
 }
 </style>
