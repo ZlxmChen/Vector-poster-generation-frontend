@@ -10,26 +10,40 @@
         @collapse="collapsed = true"
         @expand="collapsed = false"
       >
-        <div class="avatar-bar">
-          <n-avatar
-            round
-            size="large"
-            class="avatar"
-            src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
-          />
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+          "
+        >
           <div>
-            <h3>Username</h3>
-            <p>高级用户</p>
+            <div class="avatar-bar">
+              <n-avatar
+                round
+                size="large"
+                class="avatar"
+                src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
+              />
+              <div>
+                <h3>Username</h3>
+                <p>高级用户</p>
+              </div>
+            </div>
+            <n-menu
+              class="menu"
+              v-model:value="activeKey"
+              :collapsed="collapsed"
+              :collapsed-width="64"
+              :collapsed-icon-size="22"
+              :options="menuOptions"
+            />
           </div>
+          <p style="text-align: center; margin-bottom: 20px; color: #666666">
+            Copyright © 2025 YIYAN
+          </p>
         </div>
-        <n-menu
-          class="menu"
-          v-model:value="activeKey"
-          :collapsed="collapsed"
-          :collapsed-width="64"
-          :collapsed-icon-size="22"
-          :options="menuOptions"
-        />
       </n-layout-sider>
       <n-layout>
         <RouterView />

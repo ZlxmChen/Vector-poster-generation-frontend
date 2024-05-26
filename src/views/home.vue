@@ -7,11 +7,11 @@
     </div>
     <p>使用Canva可画，轻松创建专业设计，还能将其分享或打印。</p>
     <n-button secondary strong round type="info">立即开始</n-button>
-    <Carousel v-bind="settings" :breakpoints="breakpoints">
+    <Carousel class="carousel-blank" v-bind="settings" :breakpoints="breakpoints">
       <Slide v-for="(slide, i) in slides" :index="i" :key="i">
         <div class="slide-card">
           <img class="slide-img" :src="slide.src" />
-          <p>aaa</p>
+          <p @click="blankCanvasSetSize()">aaa</p>
         </div>
       </Slide>
 
@@ -20,18 +20,114 @@
       </template>
     </Carousel>
     <!-- 项目部分 -->
-    <div class="project-block">
-      <h1>回到项目</h1>
+    <div class="project">
+      <div class="project-block">
+        <Carousel>
+          <Slide v-for="project in projectList.slice(0, 10)" :key="project.id">
+            <div class="slide-card-project">
+              <img class="slide-img-project" :src="project.projectUrl" alt="" />
+              <div>
+                <h2>{{ project.projectName }}</h2>
+                <p>
+                  最后编辑时间：
+                  <span style="color: #666666">{{ project.editTime }}</span>
+                </p>
+                <n-button icon-placement="right" secondary strong round class="project-button">
+                  <template #icon>
+                    <n-icon>
+                      <ChevronForwardCircleOutline />
+                    </n-icon>
+                  </template>
+                  继续编辑
+                </n-button>
+              </div>
+            </div>
+          </Slide>
+
+          <template #addons>
+            <Navigation />
+            <Pagination />
+          </template>
+        </Carousel>
+      </div>
+      <div class="project-right">
+        <h1>
+          回到你的项目
+          <n-button text style="font-size: 2rem">
+            <template #icon>
+              <n-icon><ChevronForwardSharp /></n-icon>
+            </template>
+          </n-button>
+        </h1>
+        <p>或者从更多之前的项目中开始</p>
+      </div>
+    </div>
+    <!-- 模板部分 -->
+    <div class="template">
+      <div class="template-right">
+        <h1>
+          <n-button text style="font-size: 2rem">
+            <template #icon>
+              <n-icon><ChevronForwardSharp /></n-icon>
+            </template>
+          </n-button>
+          从你的模板开始
+        </h1>
+        <p>或者在模板库中浏览更多的选择</p>
+      </div>
+      <div class="template-block">
+        <Carousel>
+          <Slide v-for="temmplate in myTemplateList.slice(0, 10)" :key="temmplate.id">
+            <div class="slide-card-template">
+              <img class="slide-img-template" :src="temmplate.templateUrl" alt="" />
+              <div>
+                <h2>{{ temmplate.templateName }}</h2>
+                <p>
+                  创建时间：
+                  <span style="color: #666666">{{ temmplate.createTime }}</span>
+                </p>
+                <n-button icon-placement="right" secondary strong round class="project-button">
+                  <template #icon>
+                    <n-icon>
+                      <ChevronForwardCircleOutline />
+                    </n-icon>
+                  </template>
+                  从模板创建
+                </n-button>
+              </div>
+            </div>
+          </Slide>
+
+          <template #addons>
+            <Navigation />
+            <Pagination />
+          </template>
+        </Carousel>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+
 import { Carousel, Navigation, Slide } from 'vue3-carousel';
-
+import { get } from '@/network/index.js';
 import 'vue3-carousel/dist/carousel.css';
+import { ChevronForwardCircleOutline, ChevronForwardSharp } from '@vicons/ionicons5';
+const projectList = ref([]);
+const myTemplateList = ref([]);
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
+onMounted(() => {
+  get('/project', {}, (res) => {
+    projectList.value = res.projectList;
+  });
+  get('/template/my', {}, (res) => {
+    myTemplateList.value = res.list;
+  });
+});
 const settings = ref({
   itemsToShow: 1,
   snapAlign: 'center',
@@ -59,7 +155,11 @@ const breakpoints = ref({
 });
 
 const slides = ref([
-  { id: 1, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
+  {
+    id: 1,
+    src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg',
+    size: {},
+  },
   { id: 2, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
   { id: 3, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
   { id: 4, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
@@ -70,14 +170,23 @@ const slides = ref([
   { id: 14, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
   { id: 15, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
 ]);
+
+// const setSize = () => {
+//   canvasEditor.setSize(1, 2);
+//   // canvas.editor.editorWorkspace.setSize(width.value, height.value);
+// };
+// const blankCanvasSetSize = () => {
+//   setSize();
+// };
 </script>
 
 <style lang="scss" scoped>
 .homepage {
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-right: 20px;
+
   .text-color-gradient {
     display: inline-block;
     font-size: 1em;
@@ -99,11 +208,11 @@ const slides = ref([
     margin-bottom: 20px;
   }
 }
-.carousel {
-  width: 90%;
+.carousel-blank {
+  width: 96%;
   height: 240px;
   margin-top: 40px;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .slide-card {
@@ -139,5 +248,114 @@ const slides = ref([
   margin-left: 5%;
   height: 90%;
   border-radius: 10px;
+}
+.project {
+  display: flex;
+  height: 300px;
+  width: 96%;
+  margin-bottom: 40px;
+  margin-right: 20px;
+}
+.project-block {
+  height: 300px;
+  width: 50vw;
+  border-radius: 20px;
+  background-color: #f2f3f5;
+  margin-right: 20px;
+
+  Carousel {
+    width: 100%;
+    height: 100%;
+  }
+}
+.slide-img-project {
+  height: 100%;
+  width: 50%;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-right: 40px;
+}
+.slide-card-project {
+  padding: 20px;
+  height: 300px;
+  width: 80%;
+  display: flex;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    justify-content: center;
+  }
+}
+.project-button {
+  width: min-content;
+  margin-top: 20px;
+  margin-left: -10px;
+}
+.project-right {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  p {
+    margin-bottom: 20px;
+  }
+}
+
+.template {
+  display: flex;
+  justify-content: flex-end;
+  height: 300px;
+  width: 96%;
+  margin-bottom: 40px;
+  margin-left: 20px;
+}
+.template-block {
+  height: 300px;
+  width: 50vw;
+  border-radius: 20px;
+  background-color: #f2f3f5;
+  margin-left: 20px;
+
+  Carousel {
+    width: 100%;
+    height: 100%;
+  }
+}
+.slide-img-template {
+  height: 100%;
+  width: 50%;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-right: 40px;
+}
+.slide-card-template {
+  padding: 20px;
+  height: 300px;
+  width: 80%;
+  display: flex;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    justify-content: center;
+  }
+}
+.template-button {
+  width: min-content;
+  margin-top: 20px;
+  margin-right: -10px;
+}
+.template-right {
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  text-align: end;
+  p {
+    margin-bottom: 20px;
+  }
 }
 </style>
