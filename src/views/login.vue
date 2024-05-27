@@ -49,7 +49,8 @@ import { Modal, Message } from 'view-ui-plus';
 import { ref } from 'vue';
 import { getNToken, postNToken } from '@/network/index.js';
 import { sha256 } from 'js-sha256';
-
+import { useRouter } from 'vue-router';
+const router = useRouter();
 const slides = ref([
   { id: 1, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
   { id: 2, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
@@ -74,6 +75,7 @@ const handleSubmit = (valid, { email, password, username }) => {
             (data) => {
               Message.success('成功登录');
               localStorage.setItem('token', data.token);
+              router.push('/home');
             },
             (err) => {
               Message.error('账号或密码错误，请重试');
