@@ -254,9 +254,12 @@ const setActiveTab = (key) => {
   activeTab.value = key;
   switch (key) {
     case 'project':
-      get('/project/folder', {}, (res) =>{
-
-      })
+      get('/project/folder', {}, (res) => {
+        folderData.values = res.folderList.map((folder) => ({
+          id: folder.id,
+          name: folder.folderName,
+        }));
+      });
       get('/project', {}, (res) => {
         dataRef.value = res.projectList.map((project) => ({
           id: project.id,
@@ -342,7 +345,7 @@ function renameFolder(id) {
   renameString.value = null;
 }
 
-const folderData = reactive([
+const folderData = ref([
   {
     label: '平铺',
     key: 'grid',
