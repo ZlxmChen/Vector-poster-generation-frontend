@@ -44,6 +44,7 @@
           @collapse="collapsed = true"
           @expand="collapsed = false"
         >
+          <!-- 收起状态 -->
           <div v-if="collapsed">
             <div style="height: 85vh; overflow-y: auto; overflow-x: hidden">
               <n-menu
@@ -51,34 +52,36 @@
                 :collapsed-width="64"
                 :collapsed-icon-size="22"
                 :options="folderData"
+                @update:value="
+                  (key, item) => {
+                    setCurFolder(key);
+                  }
+                "
                 :render-label="renderMenuLabel"
                 :render-icon="renderMenuIcon"
               />
             </div>
           </div>
-
+          <!-- 打开状态 -->
           <div v-else>
-            <div style="display: flex; margin: 5px">
-              <n-input placeholder="搜索我的空间" size="small" style="margin-right: 5px"></n-input>
-              <n-button text style="margin-right: 5px">
-                <n-icon size="20">
-                  <Search />
-                </n-icon>
-              </n-button>
-              <n-button text style="margin-right: 5px">
-                <n-icon size="20">
-                  <FolderPlus />
-                </n-icon>
-              </n-button>
+            <div style="display: flex; margin: 5px; margin-bottom: 20px">
+              <text style="font-size: 16px">我的文件夹</text>
             </div>
             <div style="height: 80vh; overflow-y: auto; overflow-x: hidden">
               <div v-for="item in folderData" :key="item.key">
                 <div>
                   <div style="display: flex; align-items: center; margin-bottom: 5px">
-                    <n-button quaternary>
+                    <!-- 文件夹图标 -->
+                    <n-button
+                      @click="setCurFolder(item.key)"
+                      :secondary="curFolderRef === item.key"
+                      :strong="curFolderRef === item.key"
+                      :quaternary="curFolderRef !== item.key"
+                    >
                       <template #icon>
                         <n-icon>
-                          <Folder />
+                          <AlignJustified v-if="item.key === 'all'" />
+                          <Folder v-else />
                         </n-icon>
                       </template>
                       <n-input
@@ -92,8 +95,8 @@
                       ></n-input>
                       <text v-else>{{ item.label }}</text>
                     </n-button>
-
-                    <div style="margin-left: auto">
+                    <!-- 文件夹操作 -->
+                    <div v-if="item.key != 'all'" style="margin-left: auto">
                       <n-button
                         quaternary
                         @click="renameFolder"
@@ -122,47 +125,14 @@
                         </n-button>
                       </n-dropdown>
                     </div>
+                    <div v-else style="margin-left: auto">
+                      <n-button quaternary @click="createFolder">
+                        <n-icon size="16">
+                          <FolderPlus />
+                        </n-icon>
+                      </n-button>
+                    </div>
                   </div>
-                  <!-- <n-list hoverable :show-divider="false">
-                    <n-list-item v-for="file in item.children" @click="loadDoc(file.key)">
-                      <div
-                        v-if="file.key == props.docId"
-                        style="display: flex; align-items: center"
-                      >
-                        <n-icon size="20">
-                          <DocumentTextOutline />
-                        </n-icon>
-                        <p style="font-size: large; font-weight: bolder; margin-left: 5px">
-                          {{ file.label }}
-                        </p>
-                      </div>
-                      <div v-else style="display: flex; align-items: center">
-                        <n-icon>
-                          <DocumentTextOutline />
-                        </n-icon>
-                        <p style="margin-left: 3px">{{ file.label }}</p>
-                      </div>
-                      <template #suffix>
-                        <n-dropdown
-                          trigger="hover"
-                          :options="docOptions"
-                          @select="
-                            (aaa) => {
-                              curDealDocId = file.key;
-                              handleDocSelect(aaa);
-                            }
-                          "
-                        >
-                          <n-button text style="font-size: 15px">
-                            <n-icon>
-                              <EllipsisHorizontalSharp />
-                            </n-icon>
-                          </n-button>
-                        </n-dropdown>
-                      </template>
-                    </n-list-item>
-                    <div class="separator"></div>
-                  </n-list> -->
                 </div>
               </div>
             </div>
@@ -175,11 +145,40 @@
             remote
             ref="table"
             :columns="columnsRef"
-            :data="dataRef"
+            :data="filteredDataRef"
             :loading="loadingRef"
-            :pagination="paginationReactive"
             :row-key="rowKey"
-            @update:page="handlePageChange"
+          />
+          <div v-else class="card-container">
+            <n-card v-for="item in filteredDataRef" :key="item.id" hoverable>
+              <template #cover>
+                <img :src="item.src" />
+              </template>
+              <div style="margin-top: 10px; display: flex">
+                <text style="margin: auto">{{ item.name }}</text>
+                <n-dropdown
+                  trigger="hover"
+                  placement="bottom-start"
+                  :options="detailOptions"
+                  @select="
+                    (key) => {
+                      curDealItemId = item.id;
+                      handleDetailSelect(key);
+                    }
+                  "
+                >
+                  <n-button quaternary size="small" style="margin-left: auto">
+                    <n-icon><Dots /></n-icon>
+                  </n-button>
+                </n-dropdown>
+              </div>
+            </n-card>
+          </div>
+          <n-pagination
+            style="display: flex; justify-content: center; margin-top: 20px"
+            v-model:page="page"
+            :page-count="pageCount"
+            @update:page="filterDataByPage"
           />
         </n-layout-content>
       </n-layout>
@@ -196,12 +195,58 @@
       @negative-click="onNegativeClick"
       v-model:show="delFoldModel"
     ></n-modal>
+    <n-modal
+      preset="dialog"
+      title="删除"
+      type="error"
+      content="删除后将永远无法恢复。"
+      positive-text="确认"
+      negative-text="取消"
+      @positive-click="deleteItem()"
+      @negative-click="onNegativeClick"
+      v-model:show="deleteModal"
+    ></n-modal>
+    <n-modal v-model:show="moveFolderModal">
+      <n-card
+        style="width: 600px"
+        title="移动至"
+        :bordered="false"
+        size="huge"
+        role="dialog"
+        aria-modal="true"
+      >
+        <n-select v-model:value="move2folder" :options="folderData" />
+        <div style="display: flex; justify-content: flex-end; margin-top: 20px">
+          <n-button
+            size="small"
+            style="margin-right: 10px"
+            @click="
+              () => {
+                moveFolderModal.value = false;
+              }
+            "
+          >
+            取消
+          </n-button>
+          <n-button type="primary" size="small" @click="moveItem">确定</n-button>
+        </div>
+      </n-card>
+    </n-modal>
   </div>
 </template>
 <script setup>
-import { LayoutGrid, LayoutList, FolderPlus, Search, Dots, Folder, Check } from '@vicons/tabler';
-import { NIcon, NButton, NImage } from 'naive-ui';
-import { get } from '@/network/index.js';
+import {
+  LayoutGrid,
+  LayoutList,
+  FolderPlus,
+  Dots,
+  Folder,
+  Check,
+  AlignJustified,
+} from '@vicons/tabler';
+import { NIcon, NButton, NImage, NDropdown } from 'naive-ui';
+import { get, post } from '@/network/index.js';
+
 const renderIcon = (icon) => {
   return () => {
     return h(NIcon, null, {
@@ -216,9 +261,18 @@ const renderMenuLabel = (option) => {
   return option.label;
 };
 
-const renderMenuIcon = () => {
-  return h(NIcon, null, { default: () => h(Folder) });
+const renderMenuIcon = (option) => {
+  return h(NIcon, null, {
+    default: () => {
+      if (option.key === 'all') {
+        return h(AlignJustified);
+      } else {
+        return h(Folder);
+      }
+    },
+  });
 };
+
 const tabs = [
   {
     name: '项目',
@@ -230,7 +284,7 @@ const tabs = [
   },
   {
     name: '素材',
-    key: 'asset',
+    key: 'element',
   },
 ];
 
@@ -247,17 +301,33 @@ const options = [
   },
 ];
 
+const detailOptions = [
+  {
+    label: '移动',
+    key: 'move',
+  },
+  {
+    label: '删除',
+    key: 'delete',
+  },
+];
+
 const activeTab = ref('project');
 
 const setActiveTab = (key) => {
   activeTab.value = key;
+
   switch (key) {
     case 'project':
       get('/project/folder', {}, (res) => {
-        folderData.value = res.folderList.map((folder) => ({
-          key: folder.id,
-          label: folder.folderName,
-        }));
+        folderData.value = [
+          { key: 'all', label: '全部' },
+          ...res.folderList.map((folder) => ({
+            key: folder.id,
+            value: folder.id,
+            label: folder.folderName,
+          })),
+        ];
         console.log(folderData.value);
       });
       get('/project', {}, (res) => {
@@ -271,20 +341,21 @@ const setActiveTab = (key) => {
         }));
 
         console.log(dataRef.value);
-        paginationReactive.page = 1;
-        paginationReactive.itemCount = res.projectList.length;
-        paginationReactive.pageCount = Math.ceil(
-          dataRef.value.length / paginationReactive.pageSize
-        );
         loadingRef.value = false;
+      }).then(() => {
+        setCurFolder('all');
       });
       break;
     case 'template':
       get('/template/folder', {}, (res) => {
-        folderData.value = res.folderList.map((folder) => ({
-          key: folder.id,
-          label: folder.folderName,
-        }));
+        folderData.value = [
+          { key: 'all', label: '全部' },
+          ...res.folderList.map((folder) => ({
+            key: folder.id,
+            value: folder.id,
+            label: folder.folderName,
+          })),
+        ];
         console.log(folderData.value);
       });
       get('/template/my', {}, (res) => {
@@ -292,26 +363,29 @@ const setActiveTab = (key) => {
           id: template.id,
           name: template.templateName,
           src: template.templateUrl,
+          folderId: template.folderId,
           isPublic: template.isPublic,
           fileUrl: template.fileUrl,
           editTime: template.editTime,
         }));
 
         console.log(dataRef.value);
-        paginationReactive.page = 1;
-        paginationReactive.itemCount = res.projectList.length;
-        paginationReactive.pageCount = Math.ceil(
-          dataRef.value.length / paginationReactive.pageSize
-        );
         loadingRef.value = false;
+      }).then(() => {
+        setCurFolder('all');
       });
       break;
-    case 'asset':
+    case 'element':
       get('/element/folder', {}, (res) => {
-        folderData.value = res.folderList.map((folder) => ({
-          key: folder.id,
-          label: folder.folderName,
-        }));
+        folderData.value = [
+          { key: 'all', label: '全部' },
+          ...res.folderList.map((folder) => ({
+            key: folder.id,
+            value: folder.id,
+            label: folder.folderName,
+          })),
+        ];
+
         console.log(folderData.value);
       });
       get('/element/my', {}, (res) => {
@@ -326,12 +400,9 @@ const setActiveTab = (key) => {
         }));
 
         console.log(dataRef.value);
-        paginationReactive.page = 1;
-        paginationReactive.itemCount = res.projectList.length;
-        paginationReactive.pageCount = Math.ceil(
-          dataRef.value.length / paginationReactive.pageSize
-        );
         loadingRef.value = false;
+      }).then(() => {
+        setCurFolder('all');
       });
       break;
     default:
@@ -339,7 +410,7 @@ const setActiveTab = (key) => {
   }
 };
 
-const activeLayout = ref('list');
+const activeLayout = ref('grid');
 const setActiveLayout = (key) => {
   activeLayout.value = key;
 };
@@ -360,7 +431,6 @@ const foldOptions = reactive([
 
 const renameStatus = ref(false);
 const delFoldModel = ref(false);
-
 function handleFoldSelect(key) {
   switch (key) {
     case 4:
@@ -370,10 +440,40 @@ function handleFoldSelect(key) {
   }
 }
 
+const curDealItemId = ref(null);
+const moveFolderModal = ref(false);
+const deleteModal = ref(false);
+const move2folder = ref(null);
+function handleDetailSelect(key) {
+  switch (key) {
+    case 'move':
+      return (moveFolderModal.value = true);
+    case 'delete':
+      return (deleteModal.value = true);
+  }
+}
+
+function deleteItem() {
+  post('/folder/delete', { id: curDealItemId.value, type: activeTab.value });
+  setActiveTab(activeTab.value);
+}
+
+function moveItem() {
+  moveFolderModal.value = false;
+  post('/folder/move', {
+    id: curDealItemId.value,
+    type: activeTab.value,
+    folderId: move2folder.value,
+  });
+  setActiveTab(activeTab.value);
+}
+
 const renameString = ref(null);
-function renameFolder(id) {
-  console.log(id);
+function renameFolder() {
   console.log(renameString.value);
+  post('/folder/rename', { id: curDealFoldId.value, name: renameString.value });
+  const item = folderData.value.find((folder) => folder.key === curDealFoldId.value);
+  item.label = renameString.value;
   renameStatus.value = false;
   renameString.value = null;
 }
@@ -396,18 +496,37 @@ const settingColumn = {
   key: 'opreation',
   render(row) {
     return h(
-      NButton,
+      NDropdown,
       {
-        size: 'small',
-        quaternary: true,
-        onClick: () => {
-          console.log('test');
+        trigger: 'hover',
+        placement: 'bottom-start',
+        options: detailOptions,
+        onSelect: (key) => {
+          curDealItemId.value = row.id;
+          handleDetailSelect(key);
         },
       },
-      { default: () => h(NIcon, null, { default: () => h(Dots) }) }
+      {
+        default: () =>
+          h(
+            NButton,
+            {
+              size: 'small',
+              quaternary: true,
+              style: { marginLeft: 'auto' },
+            },
+            {
+              default: () =>
+                h(NIcon, null, {
+                  default: () => h(Dots),
+                }),
+            }
+          ),
+      }
     );
   },
 };
+
 
 const previewColumn = {
   title: '预览图',
@@ -439,36 +558,64 @@ const columns = [
 
 onMounted(() => {
   setActiveTab('project');
+  localStorage.setItem('token', '111');
 });
 
 const dataRef = ref([]);
+const filteredDataRef = ref([]);
+const folderDataRef = ref([]);
 const loadingRef = ref(true);
 const columnsRef = ref(columns);
-const paginationReactive = reactive({
-  page: 1,
-  pageCount: 1,
-  pageSize: 10,
-  prefix({ itemCount }) {
-    return `共 ${itemCount} 项`;
-  },
-});
+const page = ref(1);
+const pageSize = 10;
+const pageCount = ref(1);
+
+const curFolderRef = ref('all');
+
+function setCurFolder(key) {
+  curFolderRef.value = key;
+  filterData(key);
+}
+
+function filterData(key) {
+  if (key === 'all') {
+    folderDataRef.value = dataRef.value;
+  } else {
+    folderDataRef.value = dataRef.value.filter((item) => item.folderId === key);
+  }
+  page.value = 1;
+  pageCount.value = Math.ceil(folderDataRef.value.length / pageSize);
+  filterDataByPage();
+}
+
+function filterDataByPage() {
+  const startIndex = (page.value - 1) * pageSize;
+  const endIndex = page.value * pageSize;
+  filteredDataRef.value = folderDataRef.value.slice(startIndex, endIndex);
+}
 
 const rowKey = (rowData) => {
   return rowData.id;
 };
 
-const handlePageChange = (currentPage) => {
-  if (!loadingRef.value) {
-    loadingRef.value = true;
-    setTimeout(() => {
-      paginationReactive.page = currentPage;
-      loadingRef.value = false;
-    }, 500);
-  }
-};
+function deleteFold() {
+  post('/folder/delete', { id: curDealFoldId });
+  setActiveTab(activeTab.value);
+}
+
+function createFolder() {
+  post('/folder/new', { type: activeTab.value });
+  setActiveTab(activeTab.value);
+}
 </script>
 <style lang="scss" scoped>
 .active-tab {
   font-weight: bold;
+}
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  row-gap: 30px; /* 只设置卡片之间的垂直间距 */
+  column-gap: 16px; /* 只设置卡片之间的水平间距，可以根据需要调整 */
 }
 </style>
