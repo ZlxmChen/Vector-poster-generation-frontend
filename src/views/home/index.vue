@@ -178,6 +178,7 @@ import { useRoute } from 'vue-router';
 import { CanvasEventEmitter } from '@/utils/event/notifier';
 // import { downFile } from '@/utils/utils';
 import { fabric } from 'fabric';
+import { v4 as uuid } from 'uuid';
 import Editor, {
   DringPlugin,
   AlignGuidLinePlugin,
@@ -206,7 +207,12 @@ const canvasStore = useCanvasStore();
 const canvasEditor = new Editor();
 
 const event = new CanvasEventEmitter();
-
+const defaultPosition = {
+  left: 100,
+  top: 100,
+  shadow: '',
+  fontFamily: '1-1',
+};
 const state = reactive({
   menuActive: 1,
   show: false,
@@ -249,12 +255,14 @@ onMounted(() => {
 
   event.init(canvas);
   state.show = true;
-
+  console.log(route.params.command);
   const command = JSON.parse(route.params.command);
   if (command.height) {
     console.log('router params hight: ' + command.height);
     canvasEditor.setSize(command.width, command.height);
     canvasStore.setSize(command.width, command.height);
+  } else if (command.json) {
+    canvasEditor.insertSvgFile(command.json);
   }
 });
 

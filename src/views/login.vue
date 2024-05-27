@@ -73,6 +73,7 @@ const handleSubmit = (valid, { email, password, username }) => {
             { email: email, password: sha256(password + data.salt) },
             (data) => {
               Message.success('成功登录');
+              localStorage.setItem('token', data.token);
             },
             (err) => {
               Message.error('账号或密码错误，请重试');

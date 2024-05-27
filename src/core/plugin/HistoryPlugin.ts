@@ -37,11 +37,11 @@ class HistoryPlugin {
       'object:modified': (event: fabric.IEvent) => this._save(event),
       'selection:updated': (event: fabric.IEvent) => this._save(event),
     });
-    window.addEventListener('beforeunload', function (e) {
-      if (history.length > 0) {
-        (e || window.event).returnValue = '确认离开';
-      }
-    });
+    // window.addEventListener('beforeunload', function (e) {
+    //   if (history.length > 0) {
+    //     (e || window.event).returnValue = '确认离开';
+    //   }
+    // });
   }
 
   // 导入模板之后，清理 History 缓存

@@ -6,7 +6,7 @@
       什么？
     </div>
     <p>使用Canva可画，轻松创建专业设计，还能将其分享或打印。</p>
-    <n-button secondary strong round type="info">立即开始</n-button>
+    <n-button secondary strong round type="info" @click="blankCanvas()">立即开始</n-button>
     <Carousel class="carousel-blank" v-bind="settings" :breakpoints="breakpoints">
       <Slide v-for="(slide, i) in slides" :index="i" :key="i">
         <div class="slide-card">
@@ -77,16 +77,23 @@
       </div>
       <div class="template-block">
         <Carousel>
-          <Slide v-for="temmplate in myTemplateList.slice(0, 10)" :key="temmplate.id">
+          <Slide v-for="template in myTemplateList.slice(0, 10)" :key="template.id">
             <div class="slide-card-template">
-              <img class="slide-img-template" :src="temmplate.templateUrl" alt="" />
+              <img class="slide-img-template" :src="template.templateUrl" alt="" />
               <div>
-                <h2>{{ temmplate.templateName }}</h2>
+                <h2>{{ template.templateName }}</h2>
                 <p>
                   创建时间：
-                  <span style="color: #666666">{{ temmplate.createTime }}</span>
+                  <span style="color: #666666">{{ template.createTime }}</span>
                 </p>
-                <n-button icon-placement="right" secondary strong round class="project-button">
+                <n-button
+                  icon-placement="right"
+                  secondary
+                  strong
+                  round
+                  class="project-button"
+                  @click="openProject(template)"
+                >
                   <template #icon>
                     <n-icon>
                       <ChevronForwardCircleOutline />
@@ -181,6 +188,24 @@ const blankCanvasSetSize = () => {
         height: 240,
         width: 240,
       }),
+    },
+  });
+};
+
+const blankCanvas = () => {
+  router.push({
+    name: 'editor',
+    params: {
+      command: JSON.stringify({ height: 800, width: 600 }),
+    },
+  });
+};
+
+const openProject = (temmplate) => {
+  router.push({
+    name: 'editor',
+    params: {
+      command: JSON.stringify({ json: temmplate.fileUrl }),
     },
   });
 };
