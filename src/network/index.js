@@ -26,6 +26,7 @@ async function post(url, data, success, error = defaultError) {
 
 async function get(url, params, success, error = defaultError) {
   try {
+    console.log(localStorage.getItem('Token'));
     const response = await axios.get(baseUrl + url, {
       headers: {
         Token: localStorage.getItem('Token'),
@@ -45,9 +46,7 @@ async function get(url, params, success, error = defaultError) {
 async function postNToken(url, data, success, error = defaultError) {
   try {
     const response = await axios.post(baseUrl + url, data, {
-      headers: {
-        Token: localStorage.getItem('Token'),
-      },
+      headers: {},
     });
     if (response.status == 200) success(response.data);
     else error(response.data);
@@ -63,9 +62,7 @@ async function postNToken(url, data, success, error = defaultError) {
 async function getNToken(url, params, success, error = defaultError) {
   try {
     const response = await axios.get(baseUrl + url, {
-      headers: {
-        Token: localStorage.getItem('Token'),
-      },
+      headers: {},
       params,
     });
     if (response.status == 200) success(response.data);

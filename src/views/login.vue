@@ -47,10 +47,12 @@ view-ui-plus中所有的$instance都需要导入使用
     */
 import { Modal, Message } from 'view-ui-plus';
 import { ref } from 'vue';
-import { getNToken, postNToken } from '@/network/index.js';
+import { getNToken, postNToken, get } from '@/network/index.js';
 import { sha256 } from 'js-sha256';
 import { useRouter } from 'vue-router';
 const router = useRouter();
+import { useUserStore } from '@/stores/userStore';
+const userStore = useUserStore();
 const slides = ref([
   { id: 1, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
   { id: 2, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
@@ -74,7 +76,19 @@ const handleSubmit = (valid, { email, password, username }) => {
             { email: email, password: sha256(password + data.salt) },
             (data) => {
               Message.success('成功登录');
-              localStorage.setItem('token', data.token);
+              localStorage.setItem('Token', data.token);
+
+              get('/user/profile', {}, (res) => {
+                console.log(res);
+                userStore.setUser({
+                  id: res.id,
+                  username: res.username,
+                  email: res.email,
+                  gender: res.gender,
+                  avatarUrl: res.avatarUrl,
+                  registerTime: res.registerTime,
+                });
+              });
               router.push('/home');
             },
             (err) => {
@@ -103,6 +117,7 @@ const handleSubmit = (valid, { email, password, username }) => {
         },
         (data) => {
           Message.success('成功注册');
+          showLogin.value = true;
         },
         (err) => {
           console.log(err);

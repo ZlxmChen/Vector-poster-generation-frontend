@@ -20,14 +20,9 @@
         >
           <div>
             <div class="avatar-bar">
-              <n-avatar
-                round
-                size="large"
-                class="avatar"
-                src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
-              />
+              <n-avatar round size="large" class="avatar" :src="userStore.user.avatarUrl" />
               <div>
-                <h3>Username</h3>
+                <h3>{{ userStore.user.username }}</h3>
                 <p>高级用户</p>
               </div>
             </div>
@@ -81,7 +76,8 @@ function renderIcon(icon) {
 }
 
 const activeKey = ref('go-back-home'); // 当前激活的菜单项
-
+import { useUserStore } from '@/stores/userStore';
+const userStore = useUserStore();
 // 菜单项
 const menuOptions = [
   {
