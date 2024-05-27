@@ -198,6 +198,8 @@ import Editor, {
   MaterialPlugin,
 } from '@/core';
 
+import { useCanvasStore } from '@/stores/canvas';
+const canvasStore = useCanvasStore();
 // 创建编辑器
 const canvasEditor = new Editor();
 
@@ -250,6 +252,7 @@ onMounted(() => {
   if (command.height) {
     console.log('router params hight: ' + command.height);
     canvasEditor.setSize(command.width, command.height);
+    canvasStore.setSize(command.width, command.height);
   }
 });
 

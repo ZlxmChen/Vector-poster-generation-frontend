@@ -7,10 +7,10 @@
     <Divider plain orientation="left">{{ $t('size') }}</Divider>
     <Form :label-width="40" class="form-wrap">
       <FormItem :label="$t('width')" prop="name">
-        <InputNumber disabled v-model="width" @on-change="setSize"></InputNumber>
+        <InputNumber disabled v-model="canvasStore.getWidth" @on-change="setSize"></InputNumber>
       </FormItem>
       <FormItem :label="$t('height')" prop="name">
-        <InputNumber disabled v-model="height" @on-change="setSize"></InputNumber>
+        <InputNumber disabled v-model="canvasStore.getHeight" @on-change="setSize"></InputNumber>
       </FormItem>
     </Form>
     <Button type="primary" @click="() => (showModal = true)">调整尺寸</Button>
@@ -50,10 +50,10 @@
 import { Modal } from 'view-ui-plus';
 import useSelect from '@/hooks/select';
 import { useI18n } from 'vue-i18n';
-
+import { useCanvasStore } from '@/stores/canvas';
 const { mixinState, canvasEditor } = useSelect();
 const { t } = useI18n();
-
+const canvasStore = useCanvasStore();
 const DefaultSize = {
   width: 900,
   height: 1200,
@@ -64,8 +64,9 @@ const modalData = reactive({
   width: DefaultSize.width,
   height: DefaultSize.height,
 });
-let width = ref(DefaultSize.width);
-let height = ref(DefaultSize.height);
+// let width = ref(DefaultSize.width);
+// let height = ref(DefaultSize.height);
+
 let presetSize = reactive([
   {
     label: t('red_book_vertical'),
@@ -97,8 +98,10 @@ let presetSize = reactive([
 onMounted(() => {
   //canvasEditor.setSize(width.value, height.value);
   canvasEditor.on('sizeChange', (w, h) => {
-    width.value = w;
-    height.value = h;
+    // width.value = w;
+    // height.value = h;
+    canvasStore.setHeight(h);
+    canvasStore.setWidth(w);
   });
 
   // canvas.editor.editorWorkspace.setSize(width.value, height.value);
@@ -123,8 +126,10 @@ const handleClose = () => {
 };
 
 const handleConfirm = () => {
-  width.value = modalData.width;
-  height.value = modalData.height;
+  // width.value = modalData.width;
+  // height.value = modalData.height;
+  canvasStore.setHeight(modalData.height);
+  canvasStore.setWidth(modalData.width);
   setSize();
   handleClose();
 };
