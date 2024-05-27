@@ -41,8 +41,8 @@
           :width="200"
           :collapsed="collapsed"
           show-trigger
-          @collapse="(collapsed = true), (menuOptions.value = folderData.value)"
-          @expand="(collapsed = false), (menuOptions.value = [])"
+          @collapse="collapsed = true"
+          @expand="collapsed = false"
         >
           <div v-if="collapsed">
             <div style="height: 85vh; overflow-y: auto; overflow-x: hidden">
@@ -50,7 +50,7 @@
                 :collapsed="collapsed"
                 :collapsed-width="64"
                 :collapsed-icon-size="22"
-                :options="menuOptions"
+                :options="folderData"
                 :render-label="renderMenuLabel"
                 :render-icon="renderMenuIcon"
               />
@@ -72,7 +72,7 @@
               </n-button>
             </div>
             <div style="height: 80vh; overflow-y: auto; overflow-x: hidden">
-              <div v-for="item in menuOptions" :key="item.key">
+              <div v-for="item in folderData" :key="item.key">
                 <div>
                   <div style="display: flex; align-items: center; margin-bottom: 5px">
                     <n-button quaternary>
@@ -202,7 +202,6 @@
 import { LayoutGrid, LayoutList, FolderPlus, Search, Dots, Folder, Check } from '@vicons/tabler';
 import { NIcon, NButton, NImage } from 'naive-ui';
 import { get } from '@/network/index.js';
-
 const renderIcon = (icon) => {
   return () => {
     return h(NIcon, null, {
@@ -255,10 +254,11 @@ const setActiveTab = (key) => {
   switch (key) {
     case 'project':
       get('/project/folder', {}, (res) => {
-        folderData.values = res.folderList.map((folder) => ({
-          id: folder.id,
-          name: folder.folderName,
+        folderData.value = res.folderList.map((folder) => ({
+          key: folder.id,
+          label: folder.folderName,
         }));
+        console.log(folderData.value);
       });
       get('/project', {}, (res) => {
         dataRef.value = res.projectList.map((project) => ({
@@ -271,12 +271,22 @@ const setActiveTab = (key) => {
         }));
 
         console.log(dataRef.value);
-        paginationReactive.pageCount = 1;
+        paginationReactive.page = 1;
         paginationReactive.itemCount = res.projectList.length;
+        paginationReactive.pageCount = Math.ceil(
+          dataRef.value.length / paginationReactive.pageSize
+        );
         loadingRef.value = false;
       });
       break;
     case 'template':
+      get('/template/folder', {}, (res) => {
+        folderData.value = res.folderList.map((folder) => ({
+          key: folder.id,
+          label: folder.folderName,
+        }));
+        console.log(folderData.value);
+      });
       get('/template/my', {}, (res) => {
         dataRef.value = res.projectList.map((template) => ({
           id: template.id,
@@ -288,11 +298,44 @@ const setActiveTab = (key) => {
         }));
 
         console.log(dataRef.value);
-        paginationReactive.pageCount = 1;
+        paginationReactive.page = 1;
         paginationReactive.itemCount = res.projectList.length;
+        paginationReactive.pageCount = Math.ceil(
+          dataRef.value.length / paginationReactive.pageSize
+        );
         loadingRef.value = false;
       });
       break;
+    case 'asset':
+      get('/element/folder', {}, (res) => {
+        folderData.value = res.folderList.map((folder) => ({
+          key: folder.id,
+          label: folder.folderName,
+        }));
+        console.log(folderData.value);
+      });
+      get('/element/my', {}, (res) => {
+        dataRef.value = res.projectList.map((element) => ({
+          id: element.id,
+          name: element.elementName,
+          src: element.elementUrl,
+          isPublic: element.isPublic,
+          folderId: element.folderId,
+          editTime: element.creatTime,
+          prompt: element.prompt,
+        }));
+
+        console.log(dataRef.value);
+        paginationReactive.page = 1;
+        paginationReactive.itemCount = res.projectList.length;
+        paginationReactive.pageCount = Math.ceil(
+          dataRef.value.length / paginationReactive.pageSize
+        );
+        loadingRef.value = false;
+      });
+      break;
+    default:
+      console.log('unknown tab key!');
   }
 };
 
@@ -302,16 +345,6 @@ const setActiveLayout = (key) => {
 };
 
 const collapsed = ref(false);
-const menuOptions = reactive([
-  {
-    label: '平铺',
-    key: 'grid',
-  },
-  {
-    label: '列表',
-    key: 'list',
-  },
-]);
 
 const curDealFoldId = ref(0);
 const foldOptions = reactive([
@@ -404,28 +437,6 @@ const columns = [
   settingColumn,
 ];
 
-function query(page, pageSize = 10, order = 'ascend', filterValues = []) {
-  return new Promise((resolve) => {
-    const copiedData = data.map((v) => v);
-    const orderedData = order === 'descend' ? copiedData.reverse() : copiedData;
-    const filteredData = filterValues.length
-      ? orderedData.filter((row) => filterValues.includes(row.column2))
-      : orderedData;
-    const pagedData = filteredData.slice((page - 1) * pageSize, page * pageSize);
-    const total = filteredData.length;
-    const pageCount = Math.ceil(filteredData.length / pageSize);
-    setTimeout(
-      () =>
-        resolve({
-          pageCount,
-          data: pagedData,
-          total,
-        }),
-      1500
-    );
-  });
-}
-
 onMounted(() => {
   setActiveTab('project');
 });
@@ -449,6 +460,10 @@ const rowKey = (rowData) => {
 const handlePageChange = (currentPage) => {
   if (!loadingRef.value) {
     loadingRef.value = true;
+    setTimeout(() => {
+      paginationReactive.page = currentPage;
+      loadingRef.value = false;
+    }, 500);
   }
 };
 </script>
