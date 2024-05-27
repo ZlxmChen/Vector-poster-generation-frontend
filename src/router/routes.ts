@@ -2,10 +2,8 @@ import type { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
-    name: 'editor',
-    path: '/editor/:command',
+    path: '/editer',
     component: () => import('@/views/home/index.vue'),
-    props: true
   },
   {
     path: '/login',
@@ -20,9 +18,25 @@ const routes: RouteRecordRaw[] = [
         path: 'home',
         component: () => import('@/views/home.vue'),
       },
-      
-    ]
-  }
+      {
+        path: 'space',
+        redirect: '/space/my',
+        component: () => import('@/views/space.vue'),
+        children: [
+          {
+            path: 'my',
+            name: 'my',
+            component: () => import('@/views/space/my.vue'),
+          },
+          {
+            path: 'trash',
+            name: 'trash',
+            component: () => import('@/views/space/trash.vue'),
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export default routes;
