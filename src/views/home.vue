@@ -53,7 +53,7 @@
       <div class="project-right">
         <h1>
           回到你的项目
-          <n-button text style="font-size: 2rem">
+          <n-button text style="font-size: 2rem" @click="goProject()">
             <template #icon>
               <n-icon><ChevronForwardSharp /></n-icon>
             </template>
@@ -66,7 +66,7 @@
     <div class="template">
       <div class="template-right">
         <h1>
-          <n-button text style="font-size: 2rem">
+          <n-button text style="font-size: 2rem" @click="goTemplate()">
             <template #icon>
               <n-icon><ChevronForwardSharp /></n-icon>
             </template>
@@ -92,7 +92,7 @@
                   strong
                   round
                   class="project-button"
-                  @click="openProject(template)"
+                  @click="openTemplate(template)"
                 >
                   <template #icon>
                     <n-icon>
@@ -201,7 +201,7 @@ const blankCanvas = () => {
   });
 };
 
-const openProject = (temmplate) => {
+const openTemplate = (temmplate) => {
   get('/template/data', { id: temmplate.id }, (res) => {
     router.push({
       name: 'editor',
@@ -210,6 +210,23 @@ const openProject = (temmplate) => {
       },
     });
   });
+};
+const openProject = (project) => {
+  get('/project/data', { id: project.id }, (res) => {
+    router.push({
+      name: 'editor',
+      params: {
+        command: JSON.stringify({ json: res.file }),
+      },
+    });
+  });
+};
+
+const goProject = () => {
+  router.push('/project');
+};
+const goTemplate = () => {
+  router.push('/template');
 };
 </script>
 
