@@ -104,12 +104,12 @@ const menuOptions = [
         RouterLink,
         {
           to: {
-            path: '/project',
+            path: '/space',
           },
         },
-        { default: () => '项目' }
+        { default: () => '资源空间' }
       ),
-    key: 'go-project',
+    key: 'go-space',
     icon: renderIcon(AlbumsOutline),
   },
   {
