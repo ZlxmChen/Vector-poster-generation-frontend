@@ -5,6 +5,7 @@ export const useLayoutStore = defineStore('layout', () => {
   // State
   const collapsed = ref<boolean>(false);
 
+
   // Getters
   const isCollapsed = computed(() => collapsed.value);
 

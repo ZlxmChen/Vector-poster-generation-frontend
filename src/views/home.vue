@@ -202,11 +202,13 @@ const blankCanvas = () => {
 };
 
 const openProject = (temmplate) => {
-  router.push({
-    name: 'editor',
-    params: {
-      command: JSON.stringify({ json: temmplate.fileUrl }),
-    },
+  get('/template/data', { id: temmplate.id }, (res) => {
+    router.push({
+      name: 'editor',
+      params: {
+        command: JSON.stringify({ json: res.file }),
+      },
+    });
   });
 };
 </script>
