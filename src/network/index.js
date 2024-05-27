@@ -8,13 +8,15 @@ const baseUrl = 'http://127.0.0.1:4523/m1/4527485-0-default';
 
 async function post(url, data, success, error = defaultError) {
   try {
-    const response = await axios.post(baseUrl + url, data, {
-      headers: {
-        Token: localStorage.getItem('Token'),
-      },
-    });
-    if (response.status == 200) success(response.data);
-    else error(response.data);
+    if (!localStorage.getItem('Token') != '') {
+      const response = await axios.post(baseUrl + url, data, {
+        headers: {
+          Token: localStorage.getItem('Token'),
+        },
+      });
+      if (response.status == 200) success(response.data);
+      else error(response.data);
+    } else router.push('/login');
   } catch (axiosError) {
     if (axiosError.response) {
       error(axiosError.response.data);
@@ -26,15 +28,16 @@ async function post(url, data, success, error = defaultError) {
 
 async function get(url, params, success, error = defaultError) {
   try {
-    console.log(localStorage.getItem('Token'));
-    const response = await axios.get(baseUrl + url, {
-      headers: {
-        Token: localStorage.getItem('Token'),
-      },
-      params,
-    });
-    if (response.status == 200) success(response.data);
-    else error(response.data);
+    if (localStorage.getItem('Token') != '') {
+      const response = await axios.get(baseUrl + url, {
+        headers: {
+          Token: localStorage.getItem('Token'),
+        },
+        params,
+      });
+      if (response.status == 200) success(response.data);
+      else error(response.data);
+    } else router.push('/login');
   } catch (axiosError) {
     if (axiosError.response) {
       error(axiosError.response.data);
