@@ -119,7 +119,8 @@ const projectList = ref([]);
 const myTemplateList = ref([]);
 import { useRouter } from 'vue-router';
 const router = useRouter();
-
+import { useLayoutStore } from '@/stores/layout.ts';
+const layoutStore = useLayoutStore();
 onMounted(() => {
   get('/project', {}, (res) => {
     projectList.value = res.projectList;
@@ -172,6 +173,7 @@ const slides = ref([
 ]);
 
 const blankCanvasSetSize = () => {
+  layoutStore.setCollapsed(true);
   router.push({
     name: 'editor',
     params: {

@@ -1,7 +1,12 @@
 import type { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
-  
+  {
+    name: 'editor',
+    path: '/editor/:command',
+    component: () => import('@/views/home/index.vue'),
+    props: true
+  },
   {
     path: '/login',
     component: () => import('@/views/login.vue'),
@@ -15,12 +20,7 @@ const routes: RouteRecordRaw[] = [
         path: 'home',
         component: () => import('@/views/home.vue'),
       },
-      {
-        name: 'editor',
-        path: 'editor/:command',
-        component: () => import('@/views/home/index.vue'),
-        props: true
-      },
+      
     ]
   }
 ];

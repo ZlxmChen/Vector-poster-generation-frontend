@@ -5,10 +5,10 @@
         collapse-mode="width"
         :collapsed-width="15"
         :width="300"
-        :collapsed="collapsed"
+        :collapsed="layoutStore.isCollapsed"
         show-trigger
-        @collapse="collapsed = true"
-        @expand="collapsed = false"
+        @collapse="layoutStore.setCollapsed(true)"
+        @expand="layoutStore.setCollapsed(false)"
       >
         <div
           style="
@@ -34,14 +34,14 @@
             <n-menu
               class="menu"
               v-model:value="activeKey"
-              :collapsed="collapsed"
+              :collapsed="layoutStore.isCollapsed"
               :collapsed-width="64"
               :collapsed-icon-size="22"
               :options="menuOptions"
             />
           </div>
           <p
-            v-if="!collapsed"
+            v-if="!layoutStore.isCollapsed"
             style="white-space: nowrap; text-align: center; margin-bottom: 20px; color: #666666"
           >
             Copyright © 2025 YIYAN
@@ -74,13 +74,14 @@ import { RouterLink } from 'vue-router';
  */
 import { h, ref } from 'vue';
 import { NIcon } from 'naive-ui';
-
+import { useLayoutStore } from '@/stores/layout';
+const layoutStore = useLayoutStore();
 function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) });
 }
 
 const activeKey = ref('go-back-home'); // 当前激活的菜单项
-const collapsed = ref(false); // 菜单是否收起
+
 // 菜单项
 const menuOptions = [
   {
