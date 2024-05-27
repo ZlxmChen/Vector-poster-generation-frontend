@@ -527,7 +527,6 @@ const settingColumn = {
   },
 };
 
-
 const previewColumn = {
   title: '预览图',
   key: 'src',
