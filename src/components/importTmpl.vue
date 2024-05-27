@@ -85,6 +85,7 @@ canvasEditor.getMaterialType('template').then((list: materialTypeI[]) => {
 
 // 插入文件
 const insertSvgFile = () => {
+  console.log(state.jsonFile);
   canvasEditor.insertSvgFile(state.jsonFile);
 };
 
