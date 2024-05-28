@@ -44,23 +44,35 @@
             :loading="loadingRef"
             :row-key="rowKey"
           />
-          <div v-else class="card-container">
-            <n-card v-for="item in filteredDataRef" :key="item.id" hoverable>
-              <template #cover>
-                <img :src="item.src" />
-              </template>
-              <div style="margin-top: 10px; display: flex">
-                <text style="margin: auto">{{ item.name }}</text>
-                <n-button
-                  secondary
-                  size="small"
-                  style="margin-left: auto"
-                  @click="recoverItem(item.id)"
-                >
-                  恢复
-                </n-button>
-              </div>
-            </n-card>
+          <div v-else>
+            <div v-if="filteredDataRef.length != 0" class="card-container">
+              <n-card v-for="item in filteredDataRef" :key="item.id" hoverable>
+                <template #cover>
+                  <img :src="item.src" />
+                </template>
+                <div style="margin: auto; display: flex">
+                  <text style="margin: auto">{{ item.name }}</text>
+                  <n-dropdown
+                    trigger="hover"
+                    placement="bottom-start"
+                    :options="detailOptions"
+                    @select="
+                      (key) => {
+                        curDealItemId = item.id;
+                        handleDetailSelect(key);
+                      }
+                    "
+                  >
+                    <n-button quaternary size="small" style="margin-left: auto">
+                      <n-icon><Dots /></n-icon>
+                    </n-button>
+                  </n-dropdown>
+                </div>
+              </n-card>
+            </div>
+            <text v-else style="margin-top: 20px; margin-bottom: 20px; margin-left: 20px">
+              无数据
+            </text>
           </div>
           <n-pagination
             style="display: flex; justify-content: center; margin-top: 20px"
