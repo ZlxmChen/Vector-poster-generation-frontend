@@ -11,8 +11,8 @@ const router = createRouter({
 
 // 全局前置守卫
 router.beforeEach((to, from, next) => {
-  console.log('beforeEach', localStorage.getItem('token'));
-  if (to.path !== '/login' && localStorage.getItem('token') == '') {
+  console.log('beforeEach', localStorage.getItem('Token'));
+  if (to.path !== '/login' && localStorage.getItem('Token') == null) {
     // 如果用户未登录且目标路由不是登录页，重定向到登录页
     next('/login');
   } else {
