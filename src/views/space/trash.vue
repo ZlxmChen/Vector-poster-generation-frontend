@@ -44,7 +44,7 @@
             :loading="loadingRef"
             :row-key="rowKey"
           />
-          <div v-else>
+          <div>
             <div v-if="filteredDataRef.length != 0" class="card-container">
               <n-card v-for="item in filteredDataRef" :key="item.id" hoverable>
                 <template #cover>
@@ -52,21 +52,14 @@
                 </template>
                 <div style="margin: auto; display: flex; margin-top: 10px">
                   <text style="margin: auto">{{ item.name }}</text>
-                  <n-dropdown
-                    trigger="hover"
-                    placement="bottom-start"
-                    :options="detailOptions"
-                    @select="
-                      (key) => {
-                        curDealItemId = item.id;
-                        handleDetailSelect(key);
-                      }
-                    "
+                  <n-button
+                    secondary
+                    size="small"
+                    style="margin-left: auto"
+                    @click="recoverItem(item.id)"
                   >
-                    <n-button quaternary size="small" style="margin-left: auto">
-                      <n-icon><Dots /></n-icon>
-                    </n-button>
-                  </n-dropdown>
+                    恢复
+                  </n-button>
                 </div>
               </n-card>
             </div>
