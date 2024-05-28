@@ -246,6 +246,7 @@ import {
 } from '@vicons/tabler';
 import { NIcon, NButton, NImage, NDropdown } from 'naive-ui';
 import { get, post } from '@/network/index.js';
+import { set } from '@vueuse/core';
 
 const renderIcon = (icon) => {
   return () => {
@@ -319,89 +320,118 @@ const setActiveTab = (key) => {
 
   switch (key) {
     case 'project':
-      get('/project/folder', {}, (res) => {
-        folderData.value = [
-          { key: 'all', label: '全部' },
-          ...res.folderList.map((folder) => ({
-            key: folder.id,
-            value: folder.id,
-            label: folder.folderName,
-          })),
-        ];
-        console.log(folderData.value);
-      });
-      get('/project', {}, (res) => {
-        dataRef.value = res.projectList.map((project) => ({
-          id: project.id,
-          name: project.projectName,
-          src: project.projectUrl,
-          isPublic: project.isPublic,
-          fileUrl: project.fileUrl,
-          editTime: project.editTime,
-        }));
+      get(
+        '/project/folder',
+        {},
+        (res) => {
+          folderData.value = [
+            { key: 'all', label: '全部' },
+            ...res.folderList.map((folder) => ({
+              key: folder.id,
+              value: folder.id,
+              label: folder.folderName,
+            })),
+          ];
+          console.log(folderData.value);
+        },
+        errorHandler
+      );
+      get(
+        '/project',
+        {},
+        (res) => {
+          dataRef.value = res.projectList.map((project) => ({
+            id: project.id,
+            name: project.projectName,
+            src: project.projectUrl,
+            isPublic: project.isPublic == 1 ? '公开' : '私有',
+            fileUrl: project.fileUrl,
+            editTime: project.editTime,
+          }));
 
-        console.log(dataRef.value);
-        loadingRef.value = false;
-      }).then(() => {
+          console.log(dataRef.value);
+          loadingRef.value = false;
+        },
+        errorHandler
+      ).then(() => {
         setCurFolder('all');
       });
       break;
     case 'template':
-      get('/template/folder', {}, (res) => {
-        folderData.value = [
-          { key: 'all', label: '全部' },
-          ...res.folderList.map((folder) => ({
-            key: folder.id,
-            value: folder.id,
-            label: folder.folderName,
-          })),
-        ];
-        console.log(folderData.value);
-      });
-      get('/template/my', {}, (res) => {
-        dataRef.value = res.projectList.map((template) => ({
-          id: template.id,
-          name: template.templateName,
-          src: template.templateUrl,
-          folderId: template.folderId,
-          isPublic: template.isPublic,
-          fileUrl: template.fileUrl,
-          editTime: template.editTime,
-        }));
+      get(
+        '/template/folder',
+        {},
+        (res) => {
+          folderData.value = [
+            { key: 'all', label: '全部' },
+            ...res.folderList.map((folder) => ({
+              key: folder.id,
+              value: folder.id,
+              label: folder.folderName,
+            })),
+          ];
+          console.log(folderData.value);
+        },
+        errorHandler
+      );
+      get(
+        '/template/my',
+        {},
+        (res) => {
+          dataRef.value = res.list.map((template) => ({
+            id: template.id,
+            name: template.templateName,
+            src: template.templateUrl,
+            folderId: template.folderId,
+            isPublic: template.isPublic == 1 ? '公开' : '私有',
+            fileUrl: template.fileUrl,
+            editTime: template.createTime,
+          }));
 
-        console.log(dataRef.value);
-        loadingRef.value = false;
-      }).then(() => {
+          console.log(dataRef.value);
+          loadingRef.value = false;
+        },
+        errorHandler
+      ).then(() => {
         setCurFolder('all');
       });
       break;
     case 'element':
-      get('/element/folder', {}, (res) => {
-        folderData.value = [
-          { key: 'all', label: '全部' },
-          ...res.folderList.map((folder) => ({
-            key: folder.id,
-            value: folder.id,
-            label: folder.folderName,
-          })),
-        ];
+      get(
+        '/element/folder',
+        {},
+        (res) => {
+          folderData.value = [
+            { key: 'all', label: '全部' },
+            ...res.folderList.map((folder) => ({
+              key: folder.id,
+              value: folder.id,
+              label: folder.folderName,
+            })),
+          ];
 
-        console.log(folderData.value);
-      });
-      get('/element/my', {}, (res) => {
-        dataRef.value = res.projectList.map((element) => ({
-          id: element.id,
-          name: element.elementName,
-          src: element.elementUrl,
-          isPublic: element.isPublic,
-          folderId: element.folderId,
-          editTime: element.creatTime,
-          prompt: element.prompt,
-        }));
-
-        console.log(dataRef.value);
-        loadingRef.value = false;
-      }).then(() => {
+          console.log(folderData.value);
+        },
+        errorHandler
+      );
+      get(
+        '/element/my',
+        {},
+        (res) => {
+          dataRef.value = res.elementList.map((element) => ({
+            id: element.id,
+            name: element.elementName,
+            src: element.elementUrl,
+            isPublic: element.isPublic == 1 ? '公开' : '私有',
+            folderId: element.folderId,
+            editTime: element.createTime,
+            prompt: element.prompt,
+          }));
+          console.log(dataRef.value);
+          loadingRef.value = false;
+        },
+        errorHandler
+      ).then(() => {
         setCurFolder('all');
       });
       break;
@@ -454,24 +484,34 @@ function handleDetailSelect(key) {
 }
 
 function deleteItem() {
-  post('/folder/delete', { id: curDealItemId.value, type: activeTab.value });
-  setActiveTab(activeTab.value);
+  post('/folder/delete', { id: curDealItemId.value, type: activeTab.value }, (res) => {
+    console.log(res);
+  });
+  setActiveTab(activeTab.value).then(setCurFolder(curFolderRef.value));
 }
 
 function moveItem() {
   moveFolderModal.value = false;
-  post('/folder/move', {
-    id: curDealItemId.value,
-    type: activeTab.value,
-    folderId: move2folder.value,
-  });
-  setActiveTab(activeTab.value);
+  post(
+    '/folder/move',
+    {
+      id: curDealItemId.value,
+      type: activeTab.value,
+      folderId: move2folder.value,
+    },
+    (res) => {
+      console.log(res);
+    }
+  );
+  setActiveTab(activeTab.value).then(setCurFolder(curFolderRef.value));
 }
 
 const renameString = ref(null);
 function renameFolder() {
   console.log(renameString.value);
-  post('/folder/rename', { id: curDealFoldId.value, name: renameString.value });
+  post('/folder/rename', { id: curDealFoldId.value, name: renameString.value }, (res) => {
+    console.log(res);
+  });
   const item = folderData.value.find((folder) => folder.key === curDealFoldId.value);
   item.label = renameString.value;
   renameStatus.value = false;
@@ -598,13 +638,28 @@ const rowKey = (rowData) => {
 };
 
 function deleteFold() {
-  post('/folder/delete', { id: curDealFoldId });
-  setActiveTab(activeTab.value);
+  post('/folder/delete', { id: curDealFoldId.value }, (res) => {
+    console.log(res);
+  });
+  setActiveTab(activeTab.value).then(setCurFolder('all'));
 }
 
 function createFolder() {
-  post('/folder/new', { type: activeTab.value });
-  setActiveTab(activeTab.value);
+  post('/folder/new', { type: activeTab.value }, (res) => {
+    console.log(res);
+  });
+  setActiveTab(activeTab.value).then(setCurFolder(curFolderRef.value));
+}
+
+function switchStatus() {
+  post('/folder/switch', { id: curDealFoldId.value }, (res) => {
+    console.log(res);
+  });
+  setActiveTab(activeTab.value).then(setCurFolder(curFolderRef.value));
+}
+
+function errorHandler(msg) {
+  console.log(msg);
 }
 </script>
 <style lang="scss" scoped>

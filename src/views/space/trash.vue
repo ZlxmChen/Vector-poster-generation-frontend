@@ -71,47 +71,10 @@
         </n-layout-content>
       </n-layout>
     </div>
-    <n-modal
-      preset="dialog"
-      title="删除"
-      type="error"
-      content="删除后将永远无法恢复。"
-      positive-text="确认"
-      negative-text="取消"
-      @positive-click="deleteItem()"
-      @negative-click="onNegativeClick"
-      v-model:show="deleteModal"
-    ></n-modal>
-    <n-modal v-model:show="moveFolderModal">
-      <n-card
-        style="width: 600px"
-        title="移动至"
-        :bordered="false"
-        size="huge"
-        role="dialog"
-        aria-modal="true"
-      >
-        <n-select v-model:value="move2folder" :options="folderData" />
-        <div style="display: flex; justify-content: flex-end; margin-top: 20px">
-          <n-button
-            size="small"
-            style="margin-right: 10px"
-            @click="
-              () => {
-                moveFolderModal = false;
-              }
-            "
-          >
-            取消
-          </n-button>
-          <n-button type="primary" size="small" @click="moveItem">确定</n-button>
-        </div>
-      </n-card>
-    </n-modal>
   </div>
 </template>
 <script setup>
-import { LayoutGrid, LayoutList, Dots } from '@vicons/tabler';
+import { LayoutGrid, LayoutList } from '@vicons/tabler';
 import { NIcon, NButton, NImage, NDropdown } from 'naive-ui';
 import { get, post } from '@/network/index.js';
 
@@ -161,7 +124,7 @@ const setActiveTab = (key) => {
           id: project.id,
           name: project.projectName,
           src: project.projectUrl,
-          isPublic: project.isPublic,
+          isPublic: project.isPublic == 1 ? '公开' : '私有',
           fileUrl: project.fileUrl,
           editTime: project.editTime,
         }));
@@ -174,27 +137,29 @@ const setActiveTab = (key) => {
       break;
     case 'template':
       get('/template/trash', {}, (res) => {
-        dataRef.value = res.projectList.map((template) => ({
+        dataRef.value = res.list.map((template) => ({
           id: template.id,
           name: template.templateName,
           src: template.templateUrl,
           folderId: template.folderId,
-          isPublic: template.isPublic,
+          isPublic: template.isPublic == 1 ? '公开' : '私有',
           fileUrl: template.fileUrl,
-          editTime: template.editTime,
+          editTime: template.createTime,
         }));
 
         console.log(dataRef.value);
         loadingRef.value = false;
+      }).then(() => {
+        setCurFolder('all');
       });
       break;
     case 'element':
       get('/element/trash', {}, (res) => {
-        dataRef.value = res.projectList.map((element) => ({
+        dataRef.value = res.elementList.map((element) => ({
           id: element.id,
           name: element.elementName,
           src: element.elementUrl,
-          isPublic: element.isPublic,
+          isPublic: element.isPublic == 1 ? '公开' : '私有',
           folderId: element.folderId,
           editTime: element.creatTime,
           prompt: element.prompt,
@@ -202,6 +167,8 @@ const setActiveTab = (key) => {
 
         console.log(dataRef.value);
         loadingRef.value = false;
+      }).then(() => {
+        setCurFolder('all');
       });
       break;
     default:
@@ -213,37 +180,6 @@ const activeLayout = ref('grid');
 const setActiveLayout = (key) => {
   activeLayout.value = key;
 };
-
-const curDealItemId = ref(null);
-const moveFolderModal = ref(false);
-const deleteModal = ref(false);
-const move2folder = ref(null);
-
-function deleteItem() {
-  post('/folder/delete', { id: curDealItemId.value, type: activeTab.value });
-  setActiveTab(activeTab.value);
-}
-
-function moveItem() {
-  moveFolderModal.value = false;
-  post('/folder/move', {
-    id: curDealItemId.value,
-    type: activeTab.value,
-    folderId: move2folder.value,
-  });
-  setActiveTab(activeTab.value);
-}
-
-const folderData = ref([
-  {
-    label: '平铺',
-    key: 'grid',
-  },
-  {
-    label: '列表',
-    key: 'list',
-  },
-]);
 
 // 表格
 
@@ -283,7 +219,7 @@ const columns = [
     key: 'name',
   },
   {
-    title: '删除时间',
+    title: '更新时间',
     key: 'editTime',
   },
   {
@@ -335,7 +271,9 @@ const rowKey = (rowData) => {
 };
 
 function recoverItem(id) {
-  post('/folder/recoverItem', { id: id, type: activeTab.value });
+  post('/folder/recoverItem', { id: id, type: activeTab.value }, (res) => {
+    console.log(res);
+  });
   setActiveTab(activeTab.value);
 }
 </script>
