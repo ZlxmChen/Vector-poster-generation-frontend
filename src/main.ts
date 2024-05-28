@@ -15,12 +15,22 @@ import i18n from './language/index';
 //   registerSW();
 // }
 import Carousel3d from 'vue3-carousel-3d';
-import "vue3-carousel-3d/dist/index.css"
-
-import naive from 'naive-ui'
-import { createPinia } from 'pinia'
-const pinia = createPinia()
+import 'vue3-carousel-3d/dist/index.css';
+import naive from 'naive-ui';
+import { createPinia } from 'pinia';
+const pinia = createPinia();
 const app = createApp(App);
 // app.config.globalProperties.$http = axios;
 
-app.use(router).use(i18n).use(pinia).use(Carousel3d).use(naive).use(VueLazyLoad, {}).use(ViewUiPlus).mount('#app');
+app
+  .use(router)
+  .use(i18n)
+  .use(pinia)
+  .use(Carousel3d)
+  .use(naive)
+  .use(VueLazyLoad, {})
+  .use(ViewUiPlus)
+  .mount('#app');
+
+//测试用
+localStorage.setItem('Token', '111');
