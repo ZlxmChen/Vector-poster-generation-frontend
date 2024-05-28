@@ -134,8 +134,8 @@ const myTemplateList = ref([]);
 import { useRouter } from 'vue-router';
 const router = useRouter();
 import { useLayoutStore } from '@/stores/layout.ts';
-import { userStore } from '@/stores/userStore.ts';
-const userStore = userStore();
+import { useUserStore } from '@/stores/userStore';
+const userStore = useUserStore();
 const layoutStore = useLayoutStore();
 onMounted(() => {
   get('/project', {}, (res) => {
