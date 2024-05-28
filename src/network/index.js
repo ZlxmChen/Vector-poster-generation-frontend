@@ -8,7 +8,7 @@ const baseUrl = '/api';
 
 async function post(url, data, success, error = defaultError) {
   try {
-    if (!localStorage.getItem('Token') != '') {
+    if (localStorage.getItem('Token') != '') {
       const response = await axios.post(baseUrl + url, data, {
         headers: {
           Token: localStorage.getItem('Token'),

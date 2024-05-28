@@ -114,7 +114,6 @@ function filterByTab(tab) {
   if (tab == 'all') filteredDataRef.value = dataRef.value;
   else filteredDataRef.value = dataRef.value.filter((noti) => noti.type == tab);
   unReadCnt.value = filteredDataRef.value.filter((noti) => noti.isRead == false).length;
-  console.log(unReadCnt.value);
 }
 
 function markAsRead(id) {
