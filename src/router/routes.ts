@@ -2,7 +2,9 @@ import type { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/editer',
+    name: 'editer',
+    path: '/editer/:command',
+    props: true,
     component: () => import('@/views/home/index.vue'),
   },
   {

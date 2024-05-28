@@ -67,9 +67,10 @@ import { RouterLink } from 'vue-router';
  * @param icon 图标组件
  * @returns 返回一个函数，用于渲染图标组件
  */
-import { h, ref } from 'vue';
+import { h, ref, onMounted } from 'vue';
 import { NIcon } from 'naive-ui';
 import { useLayoutStore } from '@/stores/layout';
+import { get } from '@/network/index';
 const layoutStore = useLayoutStore();
 function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) });
@@ -78,6 +79,20 @@ function renderIcon(icon) {
 const activeKey = ref('go-back-home'); // 当前激活的菜单项
 import { useUserStore } from '@/stores/userStore';
 const userStore = useUserStore();
+
+onMounted(() => {
+  get('/user/profile', {}, (res) => {
+    console.log(res);
+    userStore.setUser({
+      id: res.id,
+      username: res.username,
+      email: res.email,
+      gender: res.gender,
+      avatarUrl: res.avatarUrl,
+      registerTime: res.registerTime,
+    });
+  });
+});
 // 菜单项
 const menuOptions = [
   {

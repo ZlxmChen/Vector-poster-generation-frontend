@@ -82,7 +82,7 @@ async function getNToken(url, params, success, error = defaultError) {
 }
 function defaultError(message, status = 'error') {
   if (status == 'error') {
-    //router.push('/login');
+    // router.push('/login');
     console.log(message);
   }
 }
