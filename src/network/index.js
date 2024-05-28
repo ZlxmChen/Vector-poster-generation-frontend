@@ -21,6 +21,7 @@ async function post(url, data, success, error = defaultError) {
     if (axiosError.response) {
       error(axiosError.response.data);
     } else {
+      console.log(axiosError);
       error('Network Error');
     }
   }
@@ -42,6 +43,7 @@ async function get(url, params, success, error = defaultError) {
     if (axiosError.response) {
       error(axiosError.response.data);
     } else {
+      console.log(axiosError);
       error('Network Error');
     }
   }
@@ -80,7 +82,7 @@ async function getNToken(url, params, success, error = defaultError) {
 }
 function defaultError(message, status = 'error') {
   if (status == 'error') {
-    router.push('/login');
+    // router.push('/login');
     console.log(message);
   }
 }

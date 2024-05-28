@@ -182,7 +182,7 @@ const slides = ref([
 const blankCanvasSetSize = () => {
   layoutStore.setCollapsed(true);
   router.push({
-    name: 'editor',
+    name: 'editer',
     params: {
       command: JSON.stringify({
         height: 240,
@@ -194,7 +194,7 @@ const blankCanvasSetSize = () => {
 
 const blankCanvas = () => {
   router.push({
-    name: 'editor',
+    name: 'editer',
     params: {
       command: JSON.stringify({ height: 800, width: 600 }),
     },
@@ -222,7 +222,7 @@ const openTemplate = (temmplate) => {
 const openProject = (project) => {
   get('/project/data', { id: project.id }, (res) => {
     router.push({
-      name: 'editor',
+      name: 'editer',
       params: {
         command: JSON.stringify({ json: res.file }),
       },
