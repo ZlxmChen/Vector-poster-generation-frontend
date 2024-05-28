@@ -32,7 +32,14 @@
                   最后编辑时间：
                   <span style="color: #666666">{{ project.editTime }}</span>
                 </p>
-                <n-button icon-placement="right" secondary strong round class="project-button">
+                <n-button
+                  icon-placement="right"
+                  secondary
+                  strong
+                  round
+                  class="project-button"
+                  @click="openProject(project)"
+                >
                   <template #icon>
                     <n-icon>
                       <ChevronForwardCircleOutline />
@@ -127,6 +134,8 @@ const myTemplateList = ref([]);
 import { useRouter } from 'vue-router';
 const router = useRouter();
 import { useLayoutStore } from '@/stores/layout.ts';
+import { userStore } from '@/stores/userStore.ts';
+const userStore = userStore();
 const layoutStore = useLayoutStore();
 onMounted(() => {
   get('/project', {}, (res) => {
@@ -221,6 +230,19 @@ const openTemplate = (temmplate) => {
 };
 const openProject = (project) => {
   get('/project/data', { id: project.id }, (res) => {
+    //存入store中
+    userStore.setEditingProject({
+      id: project.id,
+      userId: project.userId,
+      projectName: project.projectName,
+      projectUrl: project.projectUrl,
+      isDelete: project.isDelete,
+      isPublic: project.isPublic,
+      file: res.file,
+      editTime: project.editTime,
+      folderId: project.folderId,
+    });
+
     router.push({
       name: 'editer',
       params: {
