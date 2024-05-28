@@ -8,7 +8,7 @@
 import { useRouter } from 'vue-router';
 const router = useRouter();
 const logout = () => {
-  localStorage.setItem('token', '');
+  localStorage.removeItem('Token');
   router.push('login');
 };
 </script>
