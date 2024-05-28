@@ -222,15 +222,7 @@
       >
         <n-select v-model:value="move2folder" :options="folderData" />
         <div style="display: flex; justify-content: flex-end; margin-top: 20px">
-          <n-button
-            size="small"
-            style="margin-right: 10px"
-            @click="
-              () => {
-                moveFolderModal.value = false;
-              }
-            "
-          >
+          <n-button size="small" style="margin-right: 10px" @click="moveFolderModal = false">
             取消
           </n-button>
           <n-button type="primary" size="small" @click="moveItem">确定</n-button>
@@ -311,6 +303,10 @@ const detailOptions = [
   {
     label: '移动',
     key: 'move',
+  },
+  {
+    label: '切换',
+    key: 'switch',
   },
   {
     label: '删除',
@@ -483,6 +479,8 @@ function handleDetailSelect(key) {
   switch (key) {
     case 'move':
       return (moveFolderModal.value = true);
+    case 'switch':
+      return switchStatus();
     case 'delete':
       return (deleteModal.value = true);
   }
@@ -602,7 +600,6 @@ const columns = [
 
 onMounted(() => {
   setActiveTab('project');
-  localStorage.setItem('token', '111');
 });
 
 const dataRef = ref([]);

@@ -25,6 +25,27 @@
                 <h3>{{ userStore.user.username }}</h3>
                 <p>高级用户</p>
               </div>
+              <div style="margin-left: auto; margin-right: 10px">
+                <RouterLink
+                  :to="{ path: '/notification' }"
+                  custom
+                  v-slot="{ href, navigate, isActive }"
+                >
+                  <n-button
+                    strong
+                    quaternary
+                    circle
+                    size="large"
+                    :active="isActive"
+                    :href="href"
+                    @click="navigate"
+                  >
+                    <template #icon>
+                      <n-icon><NotificationsOutline /></n-icon>
+                    </template>
+                  </n-button>
+                </RouterLink>
+              </div>
             </div>
             <n-menu
               class="menu"
@@ -59,6 +80,7 @@ import {
   HomeOutline,
   FileTrayFullOutline,
   SettingsOutline,
+  NotificationsOutline,
 } from '@vicons/ionicons5';
 import { RouterLink } from 'vue-router';
 /**
