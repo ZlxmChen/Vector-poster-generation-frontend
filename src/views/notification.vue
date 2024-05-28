@@ -92,6 +92,7 @@ function getAllNotification(isGetAll) {
         isRead: noti.isRead,
       }));
     }).then(() => {
+      console.log(dataRef.value);
       filterByTab(curActiveTab.value);
     });
   } else {
@@ -117,7 +118,8 @@ function filterByTab(tab) {
 }
 
 function markAsRead(id) {
-  post('/notifications/markAsRead', id, () => {
+  console.log(id);
+  post('/notifications/markAsRead', { value: id }, () => {
     getAllNotification(isGetAllNoti.value);
   });
 }
