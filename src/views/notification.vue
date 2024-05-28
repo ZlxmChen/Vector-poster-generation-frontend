@@ -89,7 +89,7 @@ function getAllNotification(isGetAll) {
         content: noti.content,
         type: noti.type,
         sentAt: noti.sentAt,
-        isRead: noti.isRead,
+        isRead: noti.read,
       }));
     }).then(() => {
       console.log(dataRef.value);
@@ -103,7 +103,7 @@ function getAllNotification(isGetAll) {
         content: noti.content,
         type: noti.type,
         sentAt: noti.sentAt,
-        isRead: noti.isRead,
+        isRead: noti.read,
       }));
     }).then(() => {
       filterByTab(curActiveTab.value);
