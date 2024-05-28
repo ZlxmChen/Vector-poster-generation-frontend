@@ -21,6 +21,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/home.vue'),
       },
       {
+        path: 'notification',
+        component: () => import('@/views/notification.vue'),
+      },
+      {
         path: 'space',
         redirect: '/space/my',
         component: () => import('@/views/space.vue'),

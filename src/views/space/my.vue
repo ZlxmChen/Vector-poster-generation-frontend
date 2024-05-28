@@ -149,30 +149,35 @@
             :loading="loadingRef"
             :row-key="rowKey"
           />
-          <div v-else class="card-container">
-            <n-card v-for="item in filteredDataRef" :key="item.id" hoverable>
-              <template #cover>
-                <img :src="item.src" />
-              </template>
-              <div style="margin-top: 10px; display: flex">
-                <text style="margin: auto">{{ item.name }}</text>
-                <n-dropdown
-                  trigger="hover"
-                  placement="bottom-start"
-                  :options="detailOptions"
-                  @select="
-                    (key) => {
-                      curDealItemId = item.id;
-                      handleDetailSelect(key);
-                    }
-                  "
-                >
-                  <n-button quaternary size="small" style="margin-left: auto">
-                    <n-icon><Dots /></n-icon>
-                  </n-button>
-                </n-dropdown>
-              </div>
-            </n-card>
+          <div v-else>
+            <div v-if="filteredDataRef.length != 0" class="card-container">
+              <n-card v-for="item in filteredDataRef" :key="item.id" hoverable>
+                <template #cover>
+                  <img :src="item.src" />
+                </template>
+                <div style="margin: auto; display: flex; margin-top: 10px">
+                  <text style="margin: auto">{{ item.name }}</text>
+                  <n-dropdown
+                    trigger="hover"
+                    placement="bottom-start"
+                    :options="detailOptions"
+                    @select="
+                      (key) => {
+                        curDealItemId = item.id;
+                        handleDetailSelect(key);
+                      }
+                    "
+                  >
+                    <n-button quaternary size="small" style="margin-left: auto">
+                      <n-icon><Dots /></n-icon>
+                    </n-button>
+                  </n-dropdown>
+                </div>
+              </n-card>
+            </div>
+            <text v-else style="margin-top: 20px; margin-bottom: 20px; margin-left: 20px">
+              无数据
+            </text>
           </div>
           <n-pagination
             style="display: flex; justify-content: center; margin-top: 20px"
@@ -217,15 +222,7 @@
       >
         <n-select v-model:value="move2folder" :options="folderData" />
         <div style="display: flex; justify-content: flex-end; margin-top: 20px">
-          <n-button
-            size="small"
-            style="margin-right: 10px"
-            @click="
-              () => {
-                moveFolderModal.value = false;
-              }
-            "
-          >
+          <n-button size="small" style="margin-right: 10px" @click="moveFolderModal = false">
             取消
           </n-button>
           <n-button type="primary" size="small" @click="moveItem">确定</n-button>
@@ -306,6 +303,10 @@ const detailOptions = [
   {
     label: '移动',
     key: 'move',
+  },
+  {
+    label: '切换',
+    key: 'switch',
   },
   {
     label: '删除',
@@ -478,6 +479,8 @@ function handleDetailSelect(key) {
   switch (key) {
     case 'move':
       return (moveFolderModal.value = true);
+    case 'switch':
+      return switchStatus();
     case 'delete':
       return (deleteModal.value = true);
   }
@@ -597,7 +600,6 @@ const columns = [
 
 onMounted(() => {
   setActiveTab('project');
-  localStorage.setItem('token', '111');
 });
 
 const dataRef = ref([]);
