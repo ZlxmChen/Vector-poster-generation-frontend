@@ -50,7 +50,7 @@
                 <template #cover>
                   <img :src="item.src" />
                 </template>
-                <div style="margin: auto; display: flex">
+                <div style="margin: auto; display: flex; margin-top: 10px">
                   <text style="margin: auto">{{ item.name }}</text>
                   <n-dropdown
                     trigger="hover"
