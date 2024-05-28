@@ -202,14 +202,22 @@ const blankCanvas = () => {
 };
 
 const openTemplate = (temmplate) => {
-  get('/template/data', { id: temmplate.id }, (res) => {
-    router.push({
-      name: 'editor',
-      params: {
-        command: JSON.stringify({ json: res.file }),
-      },
-    });
-  });
+  get(
+    '/template/data',
+    { id: temmplate.id },
+    (res) => {
+      console.log(res);
+      router.push({
+        name: 'editer',
+        params: {
+          command: JSON.stringify({ json: res.file }),
+        },
+      });
+    },
+    (err) => {
+      console.log('err:' + err);
+    }
+  );
 };
 const openProject = (project) => {
   get('/project/data', { id: project.id }, (res) => {

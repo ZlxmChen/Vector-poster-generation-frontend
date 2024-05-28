@@ -359,7 +359,7 @@ const setActiveTab = (key) => {
         console.log(folderData.value);
       });
       get('/template/my', {}, (res) => {
-        dataRef.value = res.projectList.map((template) => ({
+        dataRef.value = res.templateList.map((template) => ({
           id: template.id,
           name: template.templateName,
           src: template.templateUrl,
