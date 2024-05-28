@@ -1,5 +1,5 @@
 <template>
-  <div v-if="props.data != null">
+  <div v-if="props.data != null && props.data.length != 0">
     <n-card
       v-for="item in props.data"
       style="margin-bottom: 16px"

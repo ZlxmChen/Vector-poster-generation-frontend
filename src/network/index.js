@@ -8,7 +8,7 @@ const baseUrl = 'http://127.0.0.1:4523/m1/4527485-0-default';
 
 async function post(url, data, success, error = defaultError) {
   try {
-    if (!localStorage.getItem('Token') != '') {
+    if (localStorage.getItem('Token') != '') {
       const response = await axios.post(baseUrl + url, data, {
         headers: {
           Token: localStorage.getItem('Token'),
