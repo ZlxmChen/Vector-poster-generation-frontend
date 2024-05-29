@@ -44,7 +44,7 @@
             :loading="loadingRef"
             :row-key="rowKey"
           />
-          <div>
+          <div v-else>
             <div v-if="filteredDataRef.length != 0" class="card-container">
               <n-card v-for="item in filteredDataRef" :key="item.id" hoverable>
                 <template #cover>
