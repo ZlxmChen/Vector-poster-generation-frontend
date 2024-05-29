@@ -77,18 +77,6 @@ const handleSubmit = (valid, { email, password, username }) => {
             (data) => {
               Message.success('成功登录');
               localStorage.setItem('Token', data.token);
-
-              get('/user/profile', {}, (res) => {
-                console.log(res);
-                userStore.setUser({
-                  id: res.id,
-                  username: res.username,
-                  email: res.email,
-                  gender: res.gender,
-                  avatarUrl: res.avatarUrl,
-                  registerTime: res.registerTime,
-                });
-              });
               router.push('/home');
             },
             (err) => {
