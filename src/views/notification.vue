@@ -1,6 +1,6 @@
 <template>
   <div>
-    <n-card title="通知中心" style="margin-top: 20px; min-height: 700px">
+    <n-card :bordered="false" title="通知中心" style="margin-top: 20px; min-height: 700px">
       <template #header-extra>
         <div style="margin-right: 20px; margin-top: 20px">
           <n-button v-if="isGetAllNoti" strong secondary type="info" @click="switchGetNotiState">
