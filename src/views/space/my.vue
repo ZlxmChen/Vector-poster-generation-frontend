@@ -489,8 +489,9 @@ function handleDetailSelect(key) {
 function deleteItem() {
   post('/folder/delItem', { id: curDealItemId.value, type: activeTab.value }, (res) => {
     console.log(res);
+  }).then(() => {
+    setActiveTab(activeTab.value, curFolderRef.value);
   });
-  setActiveTab(activeTab.value, curFolderRef.value);
 }
 
 function moveItem() {
@@ -505,8 +506,9 @@ function moveItem() {
     (res) => {
       console.log(res);
     }
-  );
-  setActiveTab(activeTab.value, curFolderRef.value);
+  ).then(() => {
+    setActiveTab(activeTab.value, curFolderRef.value);
+  });
 }
 
 const renameString = ref(null);
@@ -650,15 +652,17 @@ function deleteFold() {
 function createFolder() {
   post('/folder/new', { type: activeTab.value }, (res) => {
     console.log(res);
+  }).then(() => {
+    setActiveTab(activeTab.value, curFolderRef.value);
   });
-  setActiveTab(activeTab.value, curFolderRef.value);
 }
 
 function switchStatus() {
   post('/folder/switch', { id: curDealItemId.value, type: activeTab.value }, (res) => {
     console.log(res);
+  }).then(() => {
+    setActiveTab(activeTab.value, curFolderRef.value);
   });
-  setActiveTab(activeTab.value, curFolderRef.value);
 }
 
 function errorHandler(msg) {
