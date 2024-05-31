@@ -106,7 +106,7 @@ const config = ({ mode }) => {
           rewrite: (path) => path.replace(/^\/fontFile/, ''),
         },
         '/api': {
-          target: 'http://localhost:8848/',
+          target: 'http://123.249.36.120:8848/',
           changeOrigen: true,
           rewrite: (path) => path.replace(/^\/api/, ''),
         },

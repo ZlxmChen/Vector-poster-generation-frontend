@@ -2,7 +2,7 @@ import axios from 'axios';
 import router from '@/router';
 //在本地mock环境使用
 // const baseUrl = 'http://127.0.0.1:4523/m1/4527485-0-default';
-//在服务器环境使用（前后端运行在同一台服务器）
+//在服务器环境使用
 const baseUrl = '/api';
 //在MaterialPlugin中还有关于获取素材的设置, 统一只通过;
 
@@ -26,7 +26,28 @@ async function post(url, data, success, error = defaultError) {
     }
   }
 }
-
+//formData.append('name', this.name);
+async function postFormData(url, formData, success, error = defaultError) {
+  try {
+    if (localStorage.getItem('Token') != '') {
+      const response = await axios.post(baseUrl + url, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Token: localStorage.getItem('Token'),
+        },
+      });
+      if (response.status == 200) success(response.data);
+      else error(response.data);
+    } else router.push('/login');
+  } catch (axiosError) {
+    if (axiosError.response) {
+      error(axiosError.response.data);
+    } else {
+      console.log(axiosError);
+      error('Network Error');
+    }
+  }
+}
 async function get(url, params, success, error = defaultError) {
   try {
     if (localStorage.getItem('Token') != '') {
@@ -86,4 +107,4 @@ function defaultError(message, status = 'error') {
     console.log(message);
   }
 }
-export { get, post, getNToken, postNToken };
+export { get, post, getNToken, postNToken, postFormData };

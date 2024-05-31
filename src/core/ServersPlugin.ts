@@ -10,6 +10,10 @@ import { selectFiles, clipboardText } from '@/utils/utils';
 // import { clipboardText } from '@/utils/utils.ts';
 import { fabric } from 'fabric';
 import Editor from '../core';
+
+import { postFormData, post } from '@/network/index';
+import { useUserStore } from '@/stores/userStore';
+const userStore = useUserStore();
 type IEditor = Editor;
 // import { v4 as uuid } from 'uuid';
 
@@ -47,6 +51,7 @@ class ServersPlugin {
     'getCanvasData',
     'saveSvg',
     'saveImg',
+    'saveProject',
     'clear',
     'preview',
   ];
@@ -119,8 +124,17 @@ class ServersPlugin {
     )}`;
     downFile(fileStr, 'json');
   }
+  async getJsonStringsify(): Promise<string> {
+    const dataUrl = this.getJson();
+    // 把文本 text 转为 textgroup，让导入可以编辑
+    await transformText(dataUrl.objects);
+    const fileStr = `data:text/json;charset=utf-8,${encodeURIComponent(
+      JSON.stringify(dataUrl, null, '\t')
+    )}`;
+    return fileStr;
+  }
 
-  async  getCanvasData() {
+  async getCanvasData() {
     const dataUrl = this.getJson();
     // 把文本text转为textgroup，让导入可以编辑
     await transformText(dataUrl.objects);
@@ -150,6 +164,92 @@ class ServersPlugin {
         downFile(dataUrl, 'png');
       });
     });
+  }
+  base64ToFile(base64: string, fileName: string, type: string): File {
+    let arr = base64.split(',');
+    let mime = arr[0].match(/:(.*?);/)![1];
+    let bstr = atob(arr[1]);
+    let n = bstr.length;
+    let u8arr = new Uint8Array(n);
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], fileName, { type: type });
+  }
+
+  base64ToBlob(base64: string, contentType: string) {
+    const byteCharacters = atob(base64);
+    const byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+      const slice = byteCharacters.slice(offset, offset + 512);
+
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+
+    return new Blob(byteArrays, { type: contentType });
+  }
+  //return img
+  getImg() {
+    this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
+      const option = this._getSaveOption();
+      this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+      const dataUrl = this.canvas.toDataURL(option);
+      this.editor.hooksEntity.hookSaveAfter.callAsync(dataUrl, () => {
+        return this.base64ToFile(dataUrl, 'sss', 'png');
+      });
+    });
+  }
+  async saveProject() {
+    console.log('保存项目');
+    try {
+      // 判断是否是新项目
+      if (userStore.haveProject) {
+        // 老项目
+        const formData = new FormData();
+        formData.append('file', this.getImg());
+        formData.append('id', userStore.user.id.toString());
+
+        const res = await postFormData('/template/img', formData); // 等待表单数据的提交
+        userStore.setProjectUrl(res.imgUrl);
+
+        const jsonString = await this.getJsonStringsify(); // 等待获取 JSON 字符串
+        userStore.setFile(jsonString);
+      } else {
+        console.log('新项目');
+        post('/project/create', { name: 'sss', isPublic: 0 }, async (res: any) => {
+          const formData = new FormData();
+          const jsonString = await this.getJsonStringsify(); // 等待获取 JSON 字符串
+
+          formData.append('file', this.getImg());
+          formData.append('id', res.id);
+          postFormData('/template/img', formData, (res2: any) => {
+            console.log('res2', res2);
+            userStore.setEditingProject({
+              id: res.id,
+              userId: userStore.user.id,
+              projectName: 'sss',
+              projectUrl: res2.imgUrl,
+              isDelete: 0,
+              isPublic: 0,
+              file: jsonString,
+              editTime: userStore.getFormattedDate(),
+              folderId: 0,
+            });
+          });
+        });
+      }
+      // 新项目的逻辑可以在这里添加
+    } catch (error) {
+      console.error('保存项目时出错:', error);
+    }
   }
 
   preview() {
