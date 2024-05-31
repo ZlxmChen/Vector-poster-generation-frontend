@@ -243,7 +243,6 @@ import {
 } from '@vicons/tabler';
 import { NIcon, NButton, NImage, NDropdown } from 'naive-ui';
 import { get, post } from '@/network/index.js';
-import { set } from '@vueuse/core';
 
 const renderIcon = (icon) => {
   return () => {
