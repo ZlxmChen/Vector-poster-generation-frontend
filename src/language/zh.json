@@ -23,6 +23,7 @@
   "save_as_picture": "保存为图片",
   "save_as_svg": "保存为SVG",
   "save_as_json": "保存为JSON",
+  "save_project": "保存项目",
   "layers": "图层",
   "title_template": "标题模板",
   "insert_svg": "插入SVG元素",
@@ -37,17 +38,17 @@
     "text": "水印",
     "modalTitle": "配置水印",
     "setting": {
-        "name": "水印名称",
-        "size": "水印大小",
-        "angle": "水印角度",
-        "position": {
-            "label": "水印位置",
-            "lt": "左上角",
-            "rt": "右上角",
-            "lb": "左下角",
-            "rb": "右下角",
-            "full": "平铺"
-        }
+      "name": "水印名称",
+      "size": "水印大小",
+      "angle": "水印角度",
+      "position": {
+        "label": "水印位置",
+        "lt": "左上角",
+        "rt": "右上角",
+        "lb": "左下角",
+        "rb": "右下角",
+        "full": "平铺"
+      }
     }
   },
   "material": {

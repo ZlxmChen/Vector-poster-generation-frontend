@@ -20,6 +20,7 @@
           <DropdownItem name="saveImg">{{ $t('save_as_picture') }}</DropdownItem>
           <DropdownItem name="saveSvg">{{ $t('save_as_svg') }}</DropdownItem>
           <DropdownItem name="saveJson" divided>{{ $t('save_as_json') }}</DropdownItem>
+          <DropdownItem name="saveProject" divided>{{ $t('save_project') }}</DropdownItem>
         </DropdownMenu>
       </template>
     </Dropdown>
@@ -52,6 +53,10 @@ const cbMap = {
 
   saveImg() {
     canvasEditor.saveImg();
+  },
+  saveProject() {
+    console.log('saveProject');
+    canvasEditor.saveProject();
   },
 };
 

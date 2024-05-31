@@ -33,7 +33,7 @@ const config = ({ mode }) => {
         },
       }),
       vueSetupExtend(),
-      // 增加下面的配置项,这样在运行时就能检查eslint规范
+      // //增加下面的配置项,这样在运行时就能检查eslint规范
       // eslintPlugin({
       //   include: ['src/**/*.js', 'src/**/*.vue', 'src/*.js', 'src/*.vue'],
       // }),
@@ -104,6 +104,11 @@ const config = ({ mode }) => {
           target: 'https://github.com/',
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/fontFile/, ''),
+        },
+        '/api': {
+          target: 'http://123.249.36.120:8848/',
+          changeOrigen: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
         },
       },
     },
