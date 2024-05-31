@@ -125,7 +125,7 @@ const setActiveTab = (key) => {
   switch (key) {
     case 'project':
       get('/project/trash', {}, (res) => {
-        dataRef.value = res.projectList.map((project) => ({
+        dataRef.value = res.list.map((project) => ({
           id: project.id,
           name: project.projectName,
           src: project.projectUrl,
@@ -160,7 +160,7 @@ const setActiveTab = (key) => {
       break;
     case 'element':
       get('/element/trash', {}, (res) => {
-        dataRef.value = res.elementList.map((element) => ({
+        dataRef.value = res.list.map((element) => ({
           id: element.id,
           name: element.elementName,
           src: element.elementUrl,
