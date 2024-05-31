@@ -170,7 +170,7 @@ const menuOptions = [
         },
         { default: () => '设置' }
       ),
-    key: 'go-project',
+    key: 'go-settings',
     icon: renderIcon(SettingsOutline),
   },
 ];

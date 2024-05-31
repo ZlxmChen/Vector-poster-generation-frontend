@@ -69,6 +69,15 @@ export const useUserStore = defineStore('user', () => {
     editingProject.value.editTime = editTime;
     editingProject.value.file = file;
   };
+  const setProjectUrl = (newProjectUrl: string) => {
+    editingProject.value.projectUrl = newProjectUrl;
+  };
+  const setFile = (newFile: string) => {
+    editingProject.value.file = newFile;
+  };
+  const setHaveProject = (have: boolean) => {
+    haveProject.value = have;
+  };
   const saveProject = (file: string) => {
     if (haveProject.value) {
       //存在项目，
@@ -139,10 +148,14 @@ export const useUserStore = defineStore('user', () => {
     user,
     getUser,
     setUser,
+    haveProject,
     updateUserEmail,
     setEditingProject,
     updateEditingProject,
     cleanEditingProject,
     saveProject,
+    setFile,
+    setProjectUrl,
+    getFormattedDate,
   };
 });

@@ -138,7 +138,7 @@ import { useUserStore } from '@/stores/userStore';
 const userStore = useUserStore();
 const layoutStore = useLayoutStore();
 onMounted(() => {
-  get('/project', {}, (res) => {
+  get('/project/my', {}, (res) => {
     projectList.value = res.projectList;
   });
   get('/template/my', {}, (res) => {
