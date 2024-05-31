@@ -338,7 +338,7 @@ const setActiveTab = (key, folder = 'all') => {
         errorHandler
       );
       get(
-        '/project',
+        '/project/my',
         {},
         (res) => {
           dataRef.value = res.projectList.map((project) => ({
