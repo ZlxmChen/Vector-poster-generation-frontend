@@ -46,9 +46,16 @@
           />
           <div v-else>
             <div v-if="filteredDataRef.length != 0" class="card-container">
-              <n-card v-for="item in filteredDataRef" :key="item.id" hoverable>
+              <n-card
+                v-for="item in filteredDataRef"
+                :key="item.id"
+                hoverable
+                style="height: 250px"
+              >
                 <template #cover>
-                  <img :src="item.src" />
+                  <div style="height: 220px">
+                    <img :src="item.src" />
+                  </div>
                 </template>
                 <div style="margin: auto; display: flex; margin-top: 10px">
                   <text style="margin: auto">{{ item.name }}</text>
