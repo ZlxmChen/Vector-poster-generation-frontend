@@ -24,6 +24,7 @@
   "save_as_svg": "保存为SVG",
   "save_as_json": "保存为JSON",
   "save_project": "保存项目",
+  "save_template": "保存为模板",
   "layers": "图层",
   "title_template": "标题模板",
   "insert_svg": "插入SVG元素",

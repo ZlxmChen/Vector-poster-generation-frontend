@@ -6,12 +6,77 @@
       什么？
     </div>
     <p>使用Canva可画，轻松创建专业设计，还能将其分享或打印。</p>
-    <n-button secondary strong round type="info" @click="blankCanvas()">立即开始</n-button>
+    <n-space>
+      <n-button tertiary circle type="info" @click="searchModal = !searchModal">
+        <template #icon>
+          <n-icon><SearchSharp /></n-icon>
+        </template>
+      </n-button>
+      <n-button v-if="!searchModal" secondary strong round type="info" @click="blankCanvas()">
+        立即开始
+      </n-button>
+      <n-input
+        v-else
+        round
+        placeholder="搜索"
+        v-model:value="searchValue"
+        @keyup.enter.native="search"
+        @keyup.esc.native="
+          searchModal = false;
+          searchValue = '';
+        "
+      >
+        <template #suffix>
+          <n-icon :component="ChevronForwardSharp" @click="search" />
+        </template>
+      </n-input>
+    </n-space>
+    <transition name="fade">
+      <div class="search-page" v-if="searchModal">
+        <n-tabs type="segment" animated>
+          <n-tab-pane name="project" tab="项目">
+            <div class="search-tab">
+              <div class="search-item" v-for="project in searchProject" :key="project.id">
+                <img :src="project.projectUrl" alt="project-preview" />
+
+                <p @click="openProject(project)">{{ project.projectName }}</p>
+              </div>
+              <i></i>
+              <i></i>
+              <i></i>
+              <i></i>
+              <i></i>
+            </div>
+            <div class="page-index">
+              <Page :total="(10 * projectList.length) / 10" v-model="searchProjectPageIndex" />
+            </div>
+          </n-tab-pane>
+          <n-tab-pane name="template" tab="模板">
+            <div class="search-tab">
+              <div class="search-item" v-for="template in searchTemplate" :key="template.id">
+                <img :src="template.templateUrl" alt="template-preview" />
+
+                <p @click="openTemplate(template)">{{ template.templateName }}</p>
+              </div>
+              <i></i>
+              <i></i>
+              <i></i>
+              <i></i>
+              <i></i>
+            </div>
+            <div class="page-index">
+              <Page :total="(10 * myTemplateList.length) / 10" v-model="searchTemplatePageIndex" />
+            </div>
+          </n-tab-pane>
+          <n-tab-pane name="element" tab="元素"></n-tab-pane>
+        </n-tabs>
+      </div>
+    </transition>
     <Carousel class="carousel-blank" v-bind="settings" :breakpoints="breakpoints">
       <Slide v-for="(slide, i) in slides" :index="i" :key="i">
         <div class="slide-card">
           <img class="slide-img" :src="slide.src" />
-          <p @click="blankCanvasSetSize()">aaa</p>
+          <p @click="blankCanvasSetSize()">{{ slide.name }}</p>
         </div>
       </Slide>
 
@@ -128,7 +193,7 @@ import { ref, onMounted } from 'vue';
 import { Carousel, Navigation, Slide } from 'vue3-carousel';
 import { get } from '@/network/index.js';
 import 'vue3-carousel/dist/carousel.css';
-import { ChevronForwardCircleOutline, ChevronForwardSharp } from '@vicons/ionicons5';
+import { ChevronForwardCircleOutline, ChevronForwardSharp, SearchSharp } from '@vicons/ionicons5';
 const projectList = ref([]);
 const myTemplateList = ref([]);
 import { useRouter } from 'vue-router';
@@ -137,6 +202,8 @@ import { useLayoutStore } from '@/stores/layout.ts';
 import { useUserStore } from '@/stores/userStore';
 const userStore = useUserStore();
 const layoutStore = useLayoutStore();
+
+const searchModal = ref(false);
 onMounted(() => {
   get('/project/my', {}, (res) => {
     projectList.value = res.projectList;
@@ -170,22 +237,98 @@ const breakpoints = ref({
     snapAlign: 'center',
   },
 });
+const searchProjectPageIndex = ref(1);
+const searchProject = computed(() => {
+  //显示projectList中前10个数据
+  return projectList.value.slice(
+    0 + 10 * (searchProjectPageIndex.value - 1),
+    10 * searchProjectPageIndex.value
+  );
+});
+const searchTemplatePageIndex = ref(1);
+const searchTemplate = computed(() => {
+  //显示projectList中前10个数据
+  return myTemplateList.value.slice(
+    0 + 10 * (searchTemplatePageIndex.value - 1),
+    10 * searchTemplatePageIndex.value
+  );
+});
+const searchValue = ref('');
 
+const search = () => {
+  console.log(searchValue.value);
+};
 const slides = ref([
   {
     id: 1,
-    src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg',
-    size: {},
+    src: 'https://template.canva.cn/EAFaJTNsL0A/5/0/283w-jKkKLkt9694.jpg',
+    name: '简历',
+    x: 600,
+    y: 800,
   },
-  { id: 2, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
-  { id: 3, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
-  { id: 4, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
-  { id: 5, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
-  { id: 11, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
-  { id: 12, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
-  { id: 13, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
-  { id: 14, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
-  { id: 15, src: 'https://zzq-typora-picgo.oss-cn-beijing.aliyuncs.com/2024-fengru/svg/macaw.svg' },
+  {
+    id: 2,
+    src: 'https://template.canva.cn/EAFaIgSj1zE/2/0/283w-lbUgzFF_LtI.jpg',
+    name: '海报',
+    x: 600,
+    y: 800,
+  },
+  {
+    id: 3,
+    src: 'https://template.canva.cn/EAFIKQ2cuZU/1/0/283w-Y9TMsiXnxg8.jpg',
+    name: '画板',
+    x: 800,
+    y: 600,
+  },
+  {
+    id: 4,
+    src: 'https://template.canva.cn/EAFhYPU66GA/1/0/400w-TC1Bvi7Aoo4.jpg',
+    name: '公众号',
+    x: 900,
+    y: 383,
+  },
+  {
+    id: 5,
+    src: 'https://template.canva.cn/EAFMFYuEJNw/1/0/600w-zuQ8jZXbabQ.png',
+    name: '文档',
+    x: 600,
+    y: 800,
+  },
+  {
+    id: 11,
+    src: 'https://template.canva.cn/EAFLaUaLMrU/5/0/493w-pNC0kRGrsPg.jpg',
+    name: '白板',
+    x: 800,
+    y: 600,
+  },
+  {
+    id: 12,
+    src: 'https://template.canva.cn/EAFS6smtOfg/2/0/400w-5wP8BdUV_TM.jpg',
+    name: '三折页',
+    x: 1100,
+    y: 850,
+  },
+  {
+    id: 13,
+    src: 'https://template.canva.cn/EAE2D3dgzIU/1/0/400w-QDULZnptaqs.jpg',
+    name: 'logo',
+    x: 500,
+    y: 500,
+  },
+  {
+    id: 14,
+    src: 'https://template.canva.cn/EAE48sajKnk/1/0/283w-aDoIYdCUT3I.jpg',
+    name: '传单',
+    x: 1050,
+    y: 1485,
+  },
+  {
+    id: 15,
+    src: 'https://template.canva.cn/EAEwbuFFxkk/1/0/400w-AFIkKVX5y9Y.jpg',
+    name: '朋友圈',
+    x: 1080,
+    y: 1080,
+  },
 ]);
 
 const blankCanvasSetSize = () => {
@@ -266,7 +409,41 @@ const goTemplate = () => {
   flex-direction: column;
   align-items: center;
   margin-right: 20px;
+  .search-page {
+    margin-top: 20px;
+    width: 95%;
+    // min-height: 70vh;
 
+    .search-tab {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .page-index {
+      display: flex;
+      justify-content: center;
+    }
+    .search-item {
+      width: 200px;
+      height: 250px;
+      margin-bottom: 10px;
+      margin-right: 10px;
+      img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+      p {
+        margin: 0;
+      }
+    }
+
+    .search-tab > i {
+      width: 65px;
+      margin-right: 10px;
+    }
+  }
   .text-color-gradient {
     display: inline-block;
     font-size: 1em;
@@ -299,7 +476,7 @@ const goTemplate = () => {
   width: 240px;
   height: 240px;
   border-radius: 10px;
-
+  background-color: #f2f3f5;
   p {
     position: absolute;
     margin: auto;
@@ -308,7 +485,7 @@ const goTemplate = () => {
     margin-right: auto;
 
     bottom: 10px;
-    color: white;
+    color: rgb(37, 37, 37);
     font-size: medium;
     transition: bottom 0.3s ease, font-size 0.3s ease; // 添加transition属性
   }
@@ -322,10 +499,10 @@ const goTemplate = () => {
 }
 
 .slide-img {
-  object-fit: cover;
+  object-fit: contain;
   width: 90%;
-  margin-top: 5%;
-  margin-left: 5%;
+  margin: 5px;
+  margin-top: 10px;
   height: 90%;
   border-radius: 10px;
 }
