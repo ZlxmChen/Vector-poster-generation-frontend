@@ -1,9 +1,9 @@
 import axios from 'axios';
 import router from '@/router';
 //在本地mock环境使用
-const baseUrl = 'http://127.0.0.1:4523/m1/4527485-0-default';
+// const baseUrl = 'http://127.0.0.1:4523/m1/4527485-0-default';
 //在服务器环境使用
-// const baseUrl = '/api';
+const baseUrl = '/api';
 //在MaterialPlugin中还有关于获取素材的设置, 统一只通过;
 
 async function post(url, data, success, error = defaultError) {
