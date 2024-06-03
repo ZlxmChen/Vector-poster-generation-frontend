@@ -1,0 +1,209 @@
+Date : 2024-05-31 21:30:10
+Directory : d:\Work\SDbased-VectorPoster-Generator
+Total : 138 files,  30157 codes, 1046 comments, 1258 blanks, all 32461 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| JSON               |          7 |     16,296 |          0 |          4 |     16,300 |
+| vue                |         42 |      7,192 |        213 |        544 |      7,949 |
+| TypeScript         |         50 |      4,121 |        702 |        549 |      5,372 |
+| JavaScript         |         13 |      1,063 |        101 |         74 |      1,238 |
+| XML                |          9 |      1,012 |          0 |          8 |      1,020 |
+| Less               |          4 |        191 |         13 |         19 |        223 |
+| Markdown           |          2 |         95 |          0 |         38 |        133 |
+| CSS                |          4 |         62 |          0 |         13 |         75 |
+| JSON with Comments |          2 |         53 |          0 |          0 |         53 |
+| HTML               |          2 |         47 |          7 |          2 |         56 |
+| Ignore             |          1 |         17 |          3 |          5 |         25 |
+| TypeScript JSX     |          1 |          6 |          7 |          2 |         15 |
+| Properties         |          1 |          2 |          0 |          0 |          2 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                       | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                          |        138 |     30,157 |      1,046 |      1,258 |     32,461 |
+| . (Files)                                                                                                                  |         15 |     16,189 |         26 |         55 |     16,270 |
+| dist                                                                                                                       |         13 |      1,583 |         63 |         12 |      1,658 |
+| dist (Files)                                                                                                               |          1 |          7 |          0 |          0 |          7 |
+| dist\assets                                                                                                                |          7 |        943 |          0 |          6 |        949 |
+| dist\js                                                                                                                    |          5 |        633 |         63 |          6 |        702 |
+| src                                                                                                                        |        106 |     12,265 |        936 |      1,178 |     14,379 |
+| src (Files)                                                                                                                |          4 |         59 |         20 |         13 |         92 |
+| src\assets                                                                                                                 |          6 |         91 |          7 |         10 |        108 |
+| src\assets\editor                                                                                                          |          4 |         71 |          0 |          4 |         75 |
+| src\assets\fonts                                                                                                           |          2 |         20 |          7 |          6 |         33 |
+| src\components                                                                                                             |         33 |      4,876 |        179 |        392 |      5,447 |
+| src\components (Files)                                                                                                     |         29 |      4,301 |        170 |        336 |      4,807 |
+| src\components\inputNumber                                                                                                 |          2 |        510 |          0 |         50 |        560 |
+| src\components\svgIcon                                                                                                     |          2 |         65 |          9 |          6 |         80 |
+| src\config                                                                                                                 |          2 |        188 |          3 |          4 |        195 |
+| src\config\constants                                                                                                       |          2 |        188 |          3 |          4 |        195 |
+| src\core                                                                                                                   |         30 |      3,425 |        552 |        503 |      4,480 |
+| src\core (Files)                                                                                                           |          5 |        713 |         63 |        104 |        880 |
+| src\core\objects                                                                                                           |          1 |         35 |          8 |          4 |         47 |
+| src\core\plugin                                                                                                            |         19 |      1,932 |        318 |        268 |      2,518 |
+| src\core\ruler                                                                                                             |          5 |        745 |        163 |        127 |      1,035 |
+| src\hooks                                                                                                                  |          1 |         56 |         10 |         11 |         77 |
+| src\language                                                                                                               |          4 |        524 |          9 |          5 |        538 |
+| src\network                                                                                                                |          1 |        102 |          6 |          3 |        111 |
+| src\router                                                                                                                 |          2 |         67 |          4 |          7 |         78 |
+| src\stores                                                                                                                 |          3 |        190 |         14 |         23 |        227 |
+| src\styles                                                                                                                 |          4 |         93 |          7 |         12 |        112 |
+| src\utils                                                                                                                  |          5 |        137 |         78 |         24 |        239 |
+| src\utils (Files)                                                                                                          |          3 |         93 |         59 |         14 |        166 |
+| src\utils\event                                                                                                            |          2 |         44 |         19 |         10 |         73 |
+| src\views                                                                                                                  |         11 |      2,457 |         47 |        171 |      2,675 |
+| src\views (Files)                                                                                                          |          7 |        979 |          2 |         62 |      1,043 |
+| src\views\home                                                                                                             |          2 |        575 |         32 |         51 |        658 |
+| src\views\space                                                                                                            |          2 |        903 |         13 |         58 |        974 |
+| typings                                                                                                                    |          4 |        120 |         21 |         13 |        154 |
++----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                                                                                   | language           | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| d:\Work\SDbased-VectorPoster-Generator\.env                                                                                | Properties         |          2 |          0 |          0 |          2 |
+| d:\Work\SDbased-VectorPoster-Generator\.eslintrc-auto-import.json                                                          | JSON               |         67 |          0 |          1 |         68 |
+| d:\Work\SDbased-VectorPoster-Generator\.eslintrc.js                                                                        | JavaScript         |         51 |          0 |          1 |         52 |
+| d:\Work\SDbased-VectorPoster-Generator\.prettierignore                                                                     | Ignore             |         17 |          3 |          5 |         25 |
+| d:\Work\SDbased-VectorPoster-Generator\.prettierrc.js                                                                      | JavaScript         |         18 |          0 |          1 |         19 |
+| d:\Work\SDbased-VectorPoster-Generator\CODE_OF_CONDUCT.md                                                                  | Markdown           |         93 |          0 |         36 |        129 |
+| d:\Work\SDbased-VectorPoster-Generator\README.md                                                                           | Markdown           |          2 |          0 |          2 |          4 |
+| d:\Work\SDbased-VectorPoster-Generator\commitlint.config.js                                                                | JavaScript         |          3 |          0 |          1 |          4 |
+| d:\Work\SDbased-VectorPoster-Generator\dist\assets\edgecontrol-dbe38ac6.svg                                                | XML                |         17 |          0 |          1 |         18 |
+| d:\Work\SDbased-VectorPoster-Generator\dist\assets\index-6be5f9d3.css                                                      | CSS                |          1 |          0 |          1 |          2 |
+| d:\Work\SDbased-VectorPoster-Generator\dist\assets\index-f91a356e.css                                                      | CSS                |          1 |          0 |          1 |          2 |
+| d:\Work\SDbased-VectorPoster-Generator\dist\assets\ionicons-3cccccf5.svg                                                   | XML                |        870 |          0 |          0 |        870 |
+| d:\Work\SDbased-VectorPoster-Generator\dist\assets\middlecontrol-a163c615.svg                                              | XML                |         17 |          0 |          1 |         18 |
+| d:\Work\SDbased-VectorPoster-Generator\dist\assets\middlecontrolhoz-9b7cc4b3.svg                                           | XML                |         17 |          0 |          1 |         18 |
+| d:\Work\SDbased-VectorPoster-Generator\dist\assets\rotateicon-ec6729f2.svg                                                 | XML                |         20 |          0 |          1 |         21 |
+| d:\Work\SDbased-VectorPoster-Generator\dist\index.html                                                                     | HTML               |          7 |          0 |          0 |          7 |
+| d:\Work\SDbased-VectorPoster-Generator\dist\js\index-3f84cf4d.ac049e8a.js                                                  | JavaScript         |          1 |          0 |          1 |          2 |
+| d:\Work\SDbased-VectorPoster-Generator\dist\js\index-b1398dc9.f363addc.js                                                  | JavaScript         |          1 |          0 |          1 |          2 |
+| d:\Work\SDbased-VectorPoster-Generator\dist\js\index.e06dec41.js                                                           | JavaScript         |         60 |         63 |          2 |        125 |
+| d:\Work\SDbased-VectorPoster-Generator\dist\js\index.f0ca4d72.js                                                           | JavaScript         |        570 |          0 |          1 |        571 |
+| d:\Work\SDbased-VectorPoster-Generator\dist\js\index.vue_vue_type_script_name_Preview_setup_true_lang-22e0d43b.ba4471b1.js | JavaScript         |          1 |          0 |          1 |          2 |
+| d:\Work\SDbased-VectorPoster-Generator\index.html                                                                          | HTML               |         40 |          7 |          2 |         49 |
+| d:\Work\SDbased-VectorPoster-Generator\package-lock.json                                                                   | JSON               |     15,652 |          0 |          1 |     15,653 |
+| d:\Work\SDbased-VectorPoster-Generator\package.json                                                                        | JSON               |         79 |          0 |          1 |         80 |
+| d:\Work\SDbased-VectorPoster-Generator\settings.json                                                                       | JSON with Comments |         14 |          0 |          0 |         14 |
+| d:\Work\SDbased-VectorPoster-Generator\src\App.tsx                                                                         | TypeScript JSX     |          6 |          7 |          2 |         15 |
+| d:\Work\SDbased-VectorPoster-Generator\src\App.vue                                                                         | vue                |         17 |          0 |          2 |         19 |
+| d:\Work\SDbased-VectorPoster-Generator\src\assets\editor\edgecontrol.svg                                                   | XML                |         17 |          0 |          1 |         18 |
+| d:\Work\SDbased-VectorPoster-Generator\src\assets\editor\middlecontrol.svg                                                 | XML                |         17 |          0 |          1 |         18 |
+| d:\Work\SDbased-VectorPoster-Generator\src\assets\editor\middlecontrolhoz.svg                                              | XML                |         17 |          0 |          1 |         18 |
+| d:\Work\SDbased-VectorPoster-Generator\src\assets\editor\rotateicon.svg                                                    | XML                |         20 |          0 |          1 |         21 |
+| d:\Work\SDbased-VectorPoster-Generator\src\assets\fonts\font.css                                                           | CSS                |          8 |          0 |          2 |         10 |
+| d:\Work\SDbased-VectorPoster-Generator\src\assets\fonts\font.js                                                            | JavaScript         |         12 |          7 |          4 |         23 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\align.vue                                                            | vue                |        214 |          6 |          6 |        226 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\attribute.vue                                                        | vue                |        701 |          8 |         45 |        754 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\backHome.vue                                                         | vue                |         16 |          0 |          3 |         19 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\bgBar.vue                                                            | vue                |        104 |          1 |          8 |        113 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\centerAlign.vue                                                      | vue                |         94 |          6 |          4 |        104 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\clone.vue                                                            | vue                |         13 |          0 |          3 |         16 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\colorSelector.vue                                                    | vue                |        250 |         11 |         17 |        278 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\del.vue                                                              | vue                |         13 |          3 |          5 |         21 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\dragMode.vue                                                         | vue                |         49 |          7 |          6 |         62 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\filters.vue                                                          | vue                |        282 |          9 |         18 |        309 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\flip.vue                                                             | vue                |         88 |          4 |          6 |         98 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\fontTmpl.vue                                                         | vue                |         87 |          7 |          6 |        100 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\group.vue                                                            | vue                |         75 |          6 |          5 |         86 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\history.vue                                                          | vue                |         46 |          5 |          8 |         59 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\importAI.vue                                                         | vue                |        533 |         18 |         41 |        592 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\importFile.vue                                                       | vue                |        122 |          7 |          7 |        136 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\importJSON.vue                                                       | vue                |         38 |          3 |          5 |         46 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\importSvgEl.vue                                                      | vue                |        165 |          7 |         18 |        190 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\importTmpl.vue                                                       | vue                |        149 |          3 |         17 |        169 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\inputNumber\index.ts                                                 | TypeScript         |          2 |          0 |          2 |          4 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\inputNumber\inputNumber.vue                                          | vue                |        508 |          0 |         48 |        556 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\lang.vue                                                             | vue                |         37 |          8 |          8 |         53 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\layer.vue                                                            | vue                |        217 |          9 |         13 |        239 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\lock.vue                                                             | vue                |         72 |          3 |         12 |         87 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\previewCurrent.vue                                                   | vue                |         18 |          8 |          4 |         30 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\replaceImg.vue                                                       | vue                |         48 |          7 |          9 |         64 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\save.vue                                                             | vue                |         73 |          5 |         13 |         91 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\setSize.vue                                                          | vue                |        139 |          3 |         14 |        156 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\svgIcon\index.js                                                     | JavaScript         |          6 |          7 |          3 |         16 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\svgIcon\index.vue                                                    | vue                |         59 |          2 |          3 |         64 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\tools.vue                                                            | vue                |        381 |          2 |         18 |        401 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\waterMark.vue                                                        | vue                |        200 |          7 |         13 |        220 |
+| d:\Work\SDbased-VectorPoster-Generator\src\components\zoom.vue                                                             | vue                |         77 |          7 |          4 |         88 |
+| d:\Work\SDbased-VectorPoster-Generator\src\config\constants\app.ts                                                         | TypeScript         |          1 |          0 |          1 |          2 |
+| d:\Work\SDbased-VectorPoster-Generator\src\config\constants\filter.ts                                                      | TypeScript         |        187 |          3 |          3 |        193 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\ContextMenu.js                                                             | JavaScript         |        203 |         10 |         51 |        264 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\ServersPlugin.ts                                                           | TypeScript         |        262 |         25 |         30 |        317 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\core.ts                                                                    | TypeScript         |        125 |         17 |         16 |        158 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\index.ts                                                                   | TypeScript         |         42 |          7 |          2 |         51 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\objects\Arrow.js                                                           | JavaScript         |         35 |          8 |          4 |         47 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin.ts                                                                  | TypeScript         |         81 |          4 |          5 |         90 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\AlignGuidLinePlugin.ts                                              | TypeScript         |        266 |         19 |         34 |        319 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\CenterAlignPlugin.ts                                                | TypeScript         |         58 |          8 |          9 |         75 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\ControlsPlugin.ts                                                   | TypeScript         |        210 |         29 |         22 |        261 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\ControlsRotatePlugin.ts                                             | TypeScript         |         94 |         12 |          9 |        115 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\CopyPlugin.ts                                                       | TypeScript         |         88 |         18 |         10 |        116 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\DeleteHotKeyPlugin.ts                                               | TypeScript         |         38 |          9 |          8 |         55 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\DownFontPlugin.ts                                                   | TypeScript         |         20 |          8 |          6 |         34 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\DrawLinePlugin.ts                                                   | TypeScript         |        108 |          8 |         18 |        134 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\DringPlugin.ts                                                      | TypeScript         |        104 |         10 |         12 |        126 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\FlipPlugin.ts                                                       | TypeScript         |         56 |          0 |          8 |         64 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\GroupAlignPlugin.ts                                                 | TypeScript         |        222 |         96 |         29 |        347 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\GroupPlugin.ts                                                      | TypeScript         |         53 |         10 |          8 |         71 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\GroupTextEditorPlugin.ts                                            | TypeScript         |        148 |         18 |         23 |        189 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\HistoryPlugin.ts                                                    | TypeScript         |         79 |         16 |         12 |        107 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\LayerPlugin.ts                                                      | TypeScript         |         94 |          8 |         12 |        114 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\MaterialPlugin.ts                                                   | TypeScript         |         32 |         10 |          7 |         49 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\MoveHotKeyPlugin.ts                                                 | TypeScript         |         44 |          9 |          6 |         59 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\RulerPlugin.ts                                                      | TypeScript         |         47 |          9 |         13 |         69 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\plugin\WorkspacePlugin.ts                                                  | TypeScript         |        171 |         21 |         22 |        214 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\ruler\guideline.ts                                                         | TypeScript         |         95 |         11 |         18 |        124 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\ruler\index.ts                                                             | TypeScript         |         61 |         10 |         12 |         83 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\ruler\ruler.ts                                                             | TypeScript         |        413 |        125 |         78 |        616 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\ruler\type.d.ts                                                            | TypeScript         |         41 |          1 |          9 |         51 |
+| d:\Work\SDbased-VectorPoster-Generator\src\core\ruler\utils.ts                                                             | TypeScript         |        135 |         16 |         10 |        161 |
+| d:\Work\SDbased-VectorPoster-Generator\src\env.d.ts                                                                        | TypeScript         |         20 |          6 |          5 |         31 |
+| d:\Work\SDbased-VectorPoster-Generator\src\hooks\select.ts                                                                 | TypeScript         |         56 |         10 |         11 |         77 |
+| d:\Work\SDbased-VectorPoster-Generator\src\language\en.json                                                                | JSON               |        187 |          0 |          0 |        187 |
+| d:\Work\SDbased-VectorPoster-Generator\src\language\index.ts                                                               | TypeScript         |         35 |          9 |          5 |         49 |
+| d:\Work\SDbased-VectorPoster-Generator\src\language\pt.json                                                                | JSON               |        126 |          0 |          0 |        126 |
+| d:\Work\SDbased-VectorPoster-Generator\src\language\zh.json                                                                | JSON               |        176 |          0 |          0 |        176 |
+| d:\Work\SDbased-VectorPoster-Generator\src\main.ts                                                                         | TypeScript         |         16 |          7 |          4 |         27 |
+| d:\Work\SDbased-VectorPoster-Generator\src\network\index.js                                                                | JavaScript         |        102 |          6 |          3 |        111 |
+| d:\Work\SDbased-VectorPoster-Generator\src\router\index.ts                                                                 | TypeScript         |         17 |          4 |          4 |         25 |
+| d:\Work\SDbased-VectorPoster-Generator\src\router\routes.ts                                                                | TypeScript         |         50 |          0 |          3 |         53 |
+| d:\Work\SDbased-VectorPoster-Generator\src\stores\canvas.ts                                                                | TypeScript         |         28 |          3 |          5 |         36 |
+| d:\Work\SDbased-VectorPoster-Generator\src\stores\layout.ts                                                                | TypeScript         |         19 |          3 |          7 |         29 |
+| d:\Work\SDbased-VectorPoster-Generator\src\stores\userStore.ts                                                             | TypeScript         |        143 |          8 |         11 |        162 |
+| d:\Work\SDbased-VectorPoster-Generator\src\styles\contextMenu.css                                                          | CSS                |         52 |          0 |          9 |         61 |
+| d:\Work\SDbased-VectorPoster-Generator\src\styles\index.less                                                               | Less               |          3 |          2 |          1 |          6 |
+| d:\Work\SDbased-VectorPoster-Generator\src\styles\resetViewUi.less                                                         | Less               |         38 |          5 |          1 |         44 |
+| d:\Work\SDbased-VectorPoster-Generator\src\styles\variable.less                                                            | Less               |          0 |          0 |          1 |          1 |
+| d:\Work\SDbased-VectorPoster-Generator\src\utils\event\notifier.ts                                                         | TypeScript         |         34 |         14 |          7 |         55 |
+| d:\Work\SDbased-VectorPoster-Generator\src\utils\event\types.ts                                                            | TypeScript         |         10 |          5 |          3 |         18 |
+| d:\Work\SDbased-VectorPoster-Generator\src\utils\local.ts                                                                  | TypeScript         |         17 |         16 |          4 |         37 |
+| d:\Work\SDbased-VectorPoster-Generator\src\utils\math.ts                                                                   | TypeScript         |         17 |          7 |          2 |         26 |
+| d:\Work\SDbased-VectorPoster-Generator\src\utils\utils.ts                                                                  | TypeScript         |         59 |         36 |          8 |        103 |
+| d:\Work\SDbased-VectorPoster-Generator\src\views\home.vue                                                                  | vue                |        415 |          2 |         25 |        442 |
+| d:\Work\SDbased-VectorPoster-Generator\src\views\home\index.module.less                                                    | Less               |        150 |          6 |         16 |        172 |
+| d:\Work\SDbased-VectorPoster-Generator\src\views\home\index.vue                                                            | vue                |        425 |         26 |         35 |        486 |
+| d:\Work\SDbased-VectorPoster-Generator\src\views\layout.vue                                                                | vue                |        189 |          0 |          6 |        195 |
+| d:\Work\SDbased-VectorPoster-Generator\src\views\login.vue                                                                 | vue                |        148 |          0 |          9 |        157 |
+| d:\Work\SDbased-VectorPoster-Generator\src\views\notification.vue                                                          | vue                |        122 |          0 |         11 |        133 |
+| d:\Work\SDbased-VectorPoster-Generator\src\views\notifyDisplay.vue                                                         | vue                |         31 |          0 |          3 |         34 |
+| d:\Work\SDbased-VectorPoster-Generator\src\views\settings.vue                                                              | vue                |         18 |          0 |          3 |         21 |
+| d:\Work\SDbased-VectorPoster-Generator\src\views\space.vue                                                                 | vue                |         56 |          0 |          5 |         61 |
+| d:\Work\SDbased-VectorPoster-Generator\src\views\space\my.vue                                                              | vue                |        632 |          9 |         37 |        678 |
+| d:\Work\SDbased-VectorPoster-Generator\src\views\space\trash.vue                                                           | vue                |        271 |          4 |         21 |        296 |
+| d:\Work\SDbased-VectorPoster-Generator\tsconfig.json                                                                       | JSON with Comments |         39 |          0 |          0 |         39 |
+| d:\Work\SDbased-VectorPoster-Generator\tsconfig.node.json                                                                  | JSON               |          9 |          0 |          1 |         10 |
+| d:\Work\SDbased-VectorPoster-Generator\typings\auto-imports.d.ts                                                           | TypeScript         |         59 |          7 |          1 |         67 |
+| d:\Work\SDbased-VectorPoster-Generator\typings\editor.d.ts                                                                 | TypeScript         |         25 |         11 |          6 |         42 |
+| d:\Work\SDbased-VectorPoster-Generator\typings\extends.d.ts                                                                | TypeScript         |         34 |          0 |          4 |         38 |
+| d:\Work\SDbased-VectorPoster-Generator\typings\modules.ts                                                                  | TypeScript         |          2 |          3 |          2 |          7 |
+| d:\Work\SDbased-VectorPoster-Generator\vite.config.ts                                                                      | TypeScript         |        103 |         16 |          3 |        122 |
+| Total                                                                                                                      |                    |     30,157 |      1,046 |      1,258 |     32,461 |
++----------------------------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
