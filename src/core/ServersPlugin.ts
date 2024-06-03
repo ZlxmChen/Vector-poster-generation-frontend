@@ -228,6 +228,7 @@ class ServersPlugin {
     console.log('保存项目');
     try {
       // 判断是否是新项目
+      console.log('haveProject', userStore.haveProject);
       if (userStore.haveProject) {
         // 老项目
         //更新照片
@@ -235,7 +236,7 @@ class ServersPlugin {
         formData.append('file', await this.getImgFile());
         formData.append('id', userStore.user.id.toString());
 
-        postFormData('/template/img', formData, async (res2: any) => {
+        postFormData('/project/img', formData, async (res2: any) => {
           //设置editingOroject
           userStore.setHaveProject(true);
           //更新照片链接
@@ -254,7 +255,7 @@ class ServersPlugin {
           const jsonString = // 等待获取 JSON 字符串
             formData.append('file', await this.getImgFile());
           formData.append('id', res.id);
-          postFormData('/template/img', formData, async (res2: any) => {
+          postFormData('/project/img', formData, async (res2: any) => {
             console.log('res2', res2);
             //设置项目信息
             userStore.setEditingProject({

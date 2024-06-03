@@ -69,13 +69,20 @@
         ></Icon>
         <span v-else style="font-size: 24px">{{ genView.percent }}%</span>
       </Circle>
-      <img
-        v-else
-        :src="genView.output"
-        style="max-width: 100%; height: auto; cursor: pointer"
-        @click="addItem"
-        @dragend="dragItem"
-      />
+      <div v-else>
+        <img
+          :src="genView.output"
+          style="max-width: 100%; height: auto; cursor: pointer"
+          @click="addItem"
+          @dragend="dragItem"
+        />
+        <!-- 功能 -->
+        <div style="display: flex; justify-content: space-between">
+          <n-button type="primary" size="small" tertiary @click="addElement">立即添加</n-button>
+          <n-button type="info" size="small" tertiary @click="saveElement">保存元素</n-button>
+          <n-button type="error" size="small" tertiary @click="generatePoster">重新生成</n-button>
+        </div>
+      </div>
     </Card>
 
     <!-- 文本输入区域 -->
@@ -353,6 +360,7 @@ import { Input, Modal } from 'view-ui-plus';
 import { fabric } from 'fabric';
 import { v4 as uuid } from 'uuid';
 import useSelect from '@/hooks/select';
+import { SaveOutline } from '@vicons/ionicons5';
 
 const { canvasEditor }: { canvasEditor: any } = useSelect();
 
@@ -586,6 +594,30 @@ const addItem = (e: Event) => {
     canvasEditor.canvas.requestRenderAll();
   });
 };
+const addElement = () => {
+  // const target = genView.output as unknown as HTMLImageElement;
+  const url = genView.output;
+  fabric.loadSVGFromURL(url, (objects, options) => {
+    const item = fabric.util.groupSVGElements(objects, {
+      ...options,
+      ...defaultPosition,
+      id: uuid(),
+      name: 'svg元素',
+    });
+    canvasEditor.canvas.add(item);
+    canvasEditor.canvas.setActiveObject(item);
+    canvasEditor.canvas.requestRenderAll();
+  });
+};
+
+const saveElement = () => {};
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.upload-button {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 99;
+}
+</style>

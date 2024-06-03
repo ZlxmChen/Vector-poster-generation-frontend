@@ -59,6 +59,9 @@ const cbMap = {
     console.log('saveProject');
     canvasEditor.saveProject();
   },
+  saveTemplate() {
+    canvasEditor.saveTemplate();
+  },
 };
 
 const saveWith = debounce(function (type) {

@@ -23,6 +23,7 @@
         @keyup.enter.native="search"
         @keyup.esc.native="
           searchModal = false;
+          searchModal2 = false;
           searchValue = '';
         "
       >
@@ -32,7 +33,7 @@
       </n-input>
     </n-space>
     <transition name="fade">
-      <div class="search-page" v-if="searchModal">
+      <div class="search-page" v-if="searchModal2">
         <n-tabs type="segment" animated>
           <n-tab-pane name="project" tab="项目">
             <div class="search-tab">
@@ -191,7 +192,7 @@
 import { ref, onMounted } from 'vue';
 
 import { Carousel, Navigation, Slide } from 'vue3-carousel';
-import { get } from '@/network/index.js';
+import { get, post } from '@/network/index.js';
 import 'vue3-carousel/dist/carousel.css';
 import { ChevronForwardCircleOutline, ChevronForwardSharp, SearchSharp } from '@vicons/ionicons5';
 const projectList = ref([]);
@@ -200,10 +201,12 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 import { useLayoutStore } from '@/stores/layout.ts';
 import { useUserStore } from '@/stores/userStore';
+import { Message } from 'view-ui-plus';
 const userStore = useUserStore();
 const layoutStore = useLayoutStore();
 
 const searchModal = ref(false);
+const searchModal2 = ref(false);
 onMounted(() => {
   get('/project/my', {}, (res) => {
     projectList.value = res.projectList;
@@ -256,6 +259,7 @@ const searchTemplate = computed(() => {
 const searchValue = ref('');
 
 const search = () => {
+  searchModal2.value = true;
   console.log(searchValue.value);
 };
 const slides = ref([
@@ -354,7 +358,7 @@ const blankCanvas = () => {
 };
 
 const openTemplate = (temmplate) => {
-  get(
+  post(
     '/template/data',
     { id: temmplate.id },
     (res) => {
@@ -372,27 +376,37 @@ const openTemplate = (temmplate) => {
   );
 };
 const openProject = (project) => {
-  get('/project/data', { id: project.id }, (res) => {
-    //存入store中
-    userStore.setEditingProject({
-      id: project.id,
-      userId: project.userId,
-      projectName: project.projectName,
-      projectUrl: project.projectUrl,
-      isDelete: project.isDelete,
-      isPublic: project.isPublic,
-      file: res.file,
-      editTime: project.editTime,
-      folderId: project.folderId,
-    });
+  post(
+    '/project/data',
+    { id: project.id },
+    (res) => {
+      console.log('/project/data' + res);
+      //存入store中
+      if (res.file != null) {
+        userStore.setEditingProject({
+          id: project.id,
+          userId: project.userId,
+          projectName: project.projectName,
+          projectUrl: project.projectUrl,
+          isDelete: project.isDelete,
+          isPublic: project.isPublic,
+          file: res.file,
+          editTime: project.editTime,
+          folderId: project.folderId,
+        });
 
-    router.push({
-      name: 'editer',
-      params: {
-        command: JSON.stringify({ json: res.file }),
-      },
-    });
-  });
+        router.push({
+          name: 'editer',
+          params: {
+            command: JSON.stringify({ json: res.file }),
+          },
+        });
+      }
+    },
+    (err) => {
+      Message.err('登陆失败请重试');
+    }
+  );
 };
 
 const goProject = () => {
