@@ -15,6 +15,7 @@ import { postFormData, post } from '@/network/index';
 import { useUserStore } from '@/stores/userStore';
 const userStore = useUserStore();
 type IEditor = Editor;
+import { Message } from 'view-ui-plus';
 // import { v4 as uuid } from 'uuid';
 
 function downFile(fileStr: string, fileType: string) {
@@ -52,6 +53,7 @@ class ServersPlugin {
     'saveSvg',
     'saveImg',
     'saveProject',
+    'saveTemplate',
     'clear',
     'preview',
   ];
@@ -197,15 +199,30 @@ class ServersPlugin {
     return new Blob(byteArrays, { type: contentType });
   }
   //return img
-  getImg() {
-    this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
-      const option = this._getSaveOption();
-      this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
-      const dataUrl = this.canvas.toDataURL(option);
-      this.editor.hooksEntity.hookSaveAfter.callAsync(dataUrl, () => {
-        return this.base64ToFile(dataUrl, 'sss', 'png');
+  async getImgFile(): Promise<File> {
+    return new Promise((resolve, reject) => {
+      this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
+        const option = this._getSaveOption();
+        this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+        const dataUrl = this.canvas.toDataURL(option);
+        this.editor.hooksEntity.hookSaveAfter.callAsync(dataUrl, () => {
+          try {
+            const file = this.base64ToFile(dataUrl, 'img', 'png');
+            resolve(file);
+          } catch (error) {
+            reject(error);
+          }
+        });
       });
     });
+  }
+  async saveTemplate() {
+    //只有保存为项目后才能存为template
+    if (userStore.haveProject) {
+      userStore.saveTemplate();
+    } else {
+      Message.info('请先保存项目在保存为模板');
+    }
   }
   async saveProject() {
     console.log('保存项目');
@@ -213,25 +230,33 @@ class ServersPlugin {
       // 判断是否是新项目
       if (userStore.haveProject) {
         // 老项目
+        //更新照片
         const formData = new FormData();
-        formData.append('file', this.getImg());
+        formData.append('file', await this.getImgFile());
         formData.append('id', userStore.user.id.toString());
 
-        const res = await postFormData('/template/img', formData); // 等待表单数据的提交
-        userStore.setProjectUrl(res.imgUrl);
-
-        const jsonString = await this.getJsonStringsify(); // 等待获取 JSON 字符串
-        userStore.setFile(jsonString);
+        postFormData('/template/img', formData, async (res2: any) => {
+          //设置editingOroject
+          userStore.setHaveProject(true);
+          //更新照片链接
+          userStore.setProjectUrl(res2.imgUr);
+          //更新project编辑时间
+          userStore.updateDate();
+          //更新项目内容
+          userStore.setFile(await this.getJsonStringsify());
+          userStore.uploadProject();
+        });
       } else {
         console.log('新项目');
         post('/project/create', { name: 'sss', isPublic: 0 }, async (res: any) => {
+          //更新照片
           const formData = new FormData();
-          const jsonString = await this.getJsonStringsify(); // 等待获取 JSON 字符串
-
-          formData.append('file', this.getImg());
+          const jsonString = // 等待获取 JSON 字符串
+            formData.append('file', await this.getImgFile());
           formData.append('id', res.id);
-          postFormData('/template/img', formData, (res2: any) => {
+          postFormData('/template/img', formData, async (res2: any) => {
             console.log('res2', res2);
+            //设置项目信息
             userStore.setEditingProject({
               id: res.id,
               userId: userStore.user.id,
@@ -239,10 +264,12 @@ class ServersPlugin {
               projectUrl: res2.imgUrl,
               isDelete: 0,
               isPublic: 0,
-              file: jsonString,
+              file: await this.getJsonStringsify(),
               editTime: userStore.getFormattedDate(),
               folderId: 0,
             });
+            //上传项目
+            userStore.uploadProject();
           });
         });
       }

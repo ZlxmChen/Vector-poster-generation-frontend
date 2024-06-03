@@ -78,44 +78,7 @@ export const useUserStore = defineStore('user', () => {
   const setHaveProject = (have: boolean) => {
     haveProject.value = have;
   };
-  const saveProject = (file: string) => {
-    if (haveProject.value) {
-      //存在项目，
-      //获取时间，格式如1983-08-03 13:01:09
-      const editTime = getFormattedDate();
-      editingProject.value.editTime = editTime;
-      editingProject.value.file = file;
-      post(
-        'project/modify',
-        editingProject.value,
-        () => {},
-        (err) => {
-          console.log(err);
-        }
-      );
-    } else {
-      //不存在项目，
-      post(
-        '/poject/create',
-        {
-          file: file,
-          userId: user.value.id,
-          projectName: editingProject.value.projectName,
-          isPublic: editingProject.value.isPublic,
-          projectUrl: editingProject.value.projectUrl,
-          isDelete: editingProject.value.isDelete,
-          folderId: editingProject.value.folderId,
-          editTime: getFormattedDate(),
-        },
-        (res: { id: number }) => {
-          editingProject.value.id = res.id;
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
-    }
-  };
+
   const getFormattedDate = () => {
     const date = new Date();
 
@@ -143,7 +106,33 @@ export const useUserStore = defineStore('user', () => {
     };
     haveProject.value = false;
   };
-
+  const updateDate = () => {
+    editingProject.value.editTime = getFormattedDate();
+  };
+  const uploadProject = () => {
+    post(
+      '/project/modify',
+      editingProject.value,
+      (res: any) => {
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  };
+  const saveTemplate = () => {
+    post(
+      '/template/create',
+      editingProject.value,
+      (res: any) => {
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  };
   return {
     user,
     getUser,
@@ -153,9 +142,12 @@ export const useUserStore = defineStore('user', () => {
     setEditingProject,
     updateEditingProject,
     cleanEditingProject,
-    saveProject,
     setFile,
+    setHaveProject,
     setProjectUrl,
     getFormattedDate,
+    updateDate,
+    uploadProject,
+    saveTemplate,
   };
 });
