@@ -316,7 +316,7 @@ const detailOptions = [
 
 const activeTab = ref('project');
 
-const setActiveTab = (key) => {
+const setActiveTab = (key, folder = 'all') => {
   activeTab.value = key;
 
   switch (key) {
@@ -338,7 +338,7 @@ const setActiveTab = (key) => {
         errorHandler
       );
       get(
-        '/project',
+        '/project/my',
         {},
         (res) => {
           dataRef.value = res.projectList.map((project) => ({
@@ -355,7 +355,7 @@ const setActiveTab = (key) => {
         },
         errorHandler
       ).then(() => {
-        setCurFolder('all');
+        setCurFolder(folder);
       });
       break;
     case 'template':
@@ -394,7 +394,7 @@ const setActiveTab = (key) => {
         },
         errorHandler
       ).then(() => {
-        setCurFolder('all');
+        setCurFolder(folder);
       });
       break;
     case 'element':
@@ -433,7 +433,7 @@ const setActiveTab = (key) => {
         },
         errorHandler
       ).then(() => {
-        setCurFolder('all');
+        setCurFolder(folder);
       });
       break;
     default:
@@ -487,10 +487,11 @@ function handleDetailSelect(key) {
 }
 
 function deleteItem() {
-  post('/folder/delete', { id: curDealItemId.value, type: activeTab.value }, (res) => {
+  post('/folder/delItem', { id: curDealItemId.value, type: activeTab.value }, (res) => {
     console.log(res);
+  }).then(() => {
+    setActiveTab(activeTab.value, curFolderRef.value);
   });
-  setActiveTab(activeTab.value).then(setCurFolder(curFolderRef.value));
 }
 
 function moveItem() {
@@ -505,8 +506,9 @@ function moveItem() {
     (res) => {
       console.log(res);
     }
-  );
-  setActiveTab(activeTab.value).then(setCurFolder(curFolderRef.value));
+  ).then(() => {
+    setActiveTab(activeTab.value, curFolderRef.value);
+  });
 }
 
 const renameString = ref(null);
@@ -642,22 +644,25 @@ const rowKey = (rowData) => {
 function deleteFold() {
   post('/folder/delete', { id: curDealFoldId.value }, (res) => {
     console.log(res);
+    delFoldModel.value = false;
   });
-  setActiveTab(activeTab.value).then(setCurFolder('all'));
+  setActiveTab(activeTab.value);
 }
 
 function createFolder() {
   post('/folder/new', { type: activeTab.value }, (res) => {
     console.log(res);
+  }).then(() => {
+    setActiveTab(activeTab.value, curFolderRef.value);
   });
-  setActiveTab(activeTab.value).then(setCurFolder(curFolderRef.value));
 }
 
 function switchStatus() {
-  post('/folder/switch', { id: curDealFoldId.value }, (res) => {
+  post('/folder/switch', { id: curDealItemId.value, type: activeTab.value }, (res) => {
     console.log(res);
+  }).then(() => {
+    setActiveTab(activeTab.value, curFolderRef.value);
   });
-  setActiveTab(activeTab.value).then(setCurFolder(curFolderRef.value));
 }
 
 function errorHandler(msg) {

@@ -44,7 +44,7 @@
             :loading="loadingRef"
             :row-key="rowKey"
           />
-          <div>
+          <div v-else>
             <div v-if="filteredDataRef.length != 0" class="card-container">
               <n-card v-for="item in filteredDataRef" :key="item.id" hoverable>
                 <template #cover>
@@ -142,7 +142,7 @@ const setActiveTab = (key) => {
       break;
     case 'template':
       get('/template/trash', {}, (res) => {
-        dataRef.value = res.list.map((template) => ({
+        dataRef.value = res.templateList.map((template) => ({
           id: template.id,
           name: template.templateName,
           src: template.templateUrl,
