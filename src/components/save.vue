@@ -19,8 +19,9 @@
           <DropdownItem name="clipboard">{{ $t('copy_to_clipboard') }}</DropdownItem>
           <DropdownItem name="saveImg">{{ $t('save_as_picture') }}</DropdownItem>
           <DropdownItem name="saveSvg">{{ $t('save_as_svg') }}</DropdownItem>
-          <DropdownItem name="saveJson" divided>{{ $t('save_as_json') }}</DropdownItem>
+          <DropdownItem name="saveJson">{{ $t('save_as_json') }}</DropdownItem>
           <DropdownItem name="saveProject" divided>{{ $t('save_project') }}</DropdownItem>
+          <DropdownItem name="saveTemplate">{{ $t('save_template') }}</DropdownItem>
         </DropdownMenu>
       </template>
     </Dropdown>
