@@ -145,20 +145,20 @@ const menuOptions = [
     key: 'go-space',
     icon: renderIcon(AlbumsOutline),
   },
-  {
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            path: '/temmplate',
-          },
-        },
-        { default: () => '模板' }
-      ),
-    key: 'go-project',
-    icon: renderIcon(FileTrayFullOutline),
-  },
+  // {
+  //   label: () =>
+  //     h(
+  //       RouterLink,
+  //       {
+  //         to: {
+  //           path: '/temmplate',
+  //         },
+  //       },
+  //       { default: () => '模板' }
+  //     ),
+  //   key: 'go-project',
+  //   icon: renderIcon(FileTrayFullOutline),
+  // },
   {
     label: () =>
       h(
