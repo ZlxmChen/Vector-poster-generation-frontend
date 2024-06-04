@@ -156,6 +156,7 @@
                 :key="item.id"
                 hoverable
                 style="height: 250px"
+                @click="handleClick(item)"
               >
                 <template #cover>
                   <div style="height: 210px">
@@ -250,7 +251,10 @@ import {
 } from '@vicons/tabler';
 import { NIcon, NButton, NImage, NDropdown } from 'naive-ui';
 import { get, post } from '@/network/index.js';
-import { set } from '@vueuse/core';
+import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/userStore';
+const router = useRouter();
+const userStore = useUserStore();
 
 const renderIcon = (icon) => {
   return () => {
@@ -353,8 +357,11 @@ const setActiveTab = (key, folder = 'all') => {
             name: project.projectName,
             src: project.projectUrl,
             isPublic: project.isPublic == 1 ? '公开' : '私有',
-            fileUrl: project.fileUrl,
             editTime: project.editTime,
+            userId: project.userId,
+            projectUrl: project.projectUrl,
+            isDelete: project.isDelete,
+            folderId: project.folderId,
           }));
 
           console.log(dataRef.value);
@@ -675,6 +682,60 @@ function switchStatus() {
 function errorHandler(msg) {
   console.log(msg);
 }
+
+const handleClick = (item) => {
+  switch (activeTab.value) {
+    case 'project':
+      openProject(item);
+      break;
+    case 'template':
+      openTemplate(item);
+      break;
+  }
+};
+
+const openTemplate = (template) => {
+  post(
+    '/template/data',
+    { id: template.id },
+    (res) => {
+      console.log(res);
+      router.push({
+        name: 'editer',
+        params: {
+          command: JSON.stringify({ json: res.file }),
+        },
+      });
+    },
+    (err) => {
+      console.log('err:' + err);
+    }
+  );
+};
+
+const openProject = (project) => {
+  post('/project/data', { id: project.id }, (res) => {
+    //存入store中
+    userStore.setEditingProject({
+      id: project.id,
+      userId: project.userId,
+      projectName: project.name,
+      projectUrl: project.src,
+      isDelete: project.isDelete,
+      isPublic: project.isPublic,
+      file: res.file,
+      editTime: project.editTime,
+      folderId: project.folderId,
+    });
+
+    router.push({
+      name: 'editer',
+      params: {
+        command: JSON.stringify({ json: res.file }),
+      },
+    });
+  });
+};
 </script>
 <style lang="scss" scoped>
 .active-tab {
