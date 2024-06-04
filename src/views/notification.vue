@@ -89,9 +89,10 @@ function getAllNotification(isGetAll) {
         content: noti.content,
         type: noti.type,
         sentAt: noti.sentAt,
-        isRead: noti.isRead,
+        isRead: noti.read,
       }));
     }).then(() => {
+      console.log(dataRef.value);
       filterByTab(curActiveTab.value);
     });
   } else {
@@ -102,7 +103,7 @@ function getAllNotification(isGetAll) {
         content: noti.content,
         type: noti.type,
         sentAt: noti.sentAt,
-        isRead: noti.isRead,
+        isRead: noti.read,
       }));
     }).then(() => {
       filterByTab(curActiveTab.value);
@@ -117,7 +118,8 @@ function filterByTab(tab) {
 }
 
 function markAsRead(id) {
-  post('/notifications/markAsRead', id, () => {
+  console.log(id);
+  post('/notifications/markAsRead', { value: id }, () => {
     getAllNotification(isGetAllNoti.value);
   });
 }

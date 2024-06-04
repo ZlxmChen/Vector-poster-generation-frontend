@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { post } from '@/network/index';
-
+import { Message } from 'view-ui-plus';
 // 定义用户信息的类型
 interface User {
   id: string;
@@ -125,9 +125,11 @@ export const useUserStore = defineStore('user', () => {
       },
 
       (res: any) => {
+        Message.success('项目保存成功');
         console.log(res);
       },
       (err) => {
+        Message.error('项目保存失败，请重试');
         console.log(err);
       }
     );
@@ -139,6 +141,7 @@ export const useUserStore = defineStore('user', () => {
         id: editingProject.value.id,
       },
       (res: any) => {
+        Message.success('模板创建成功');
         console.log(res);
       },
       (err) => {
