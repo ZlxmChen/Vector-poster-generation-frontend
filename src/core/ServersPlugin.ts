@@ -329,7 +329,7 @@ class ServersPlugin {
                 isPublic: 0,
                 file: await this.getJsonStringsify(),
                 editTime: userStore.getFormattedDate(),
-                folderId: 0,
+                folderId: 2,
               });
               //上传项目
               userStore.uploadProject();
