@@ -323,7 +323,7 @@ class ServersPlugin {
               userStore.setEditingProject({
                 id: res.id,
                 userId: userStore.user.id,
-                projectName: 'sss',
+                projectName: userStore.editingProject.projectName,
                 projectUrl: res2.imgUrl,
                 isDelete: 0,
                 isPublic: 0,

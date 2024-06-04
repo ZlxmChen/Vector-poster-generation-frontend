@@ -679,7 +679,7 @@ const saveElement = async () => {
     await post('/element/upload', formData, async (res2: any) => {
       var svgUrl = res.res;
       post('/element/save', {
-        fileName: 'sss',
+        fileName: 'element',
         filePath: svgUrl,
         isPublic: false,
         pngPath: pngUrl,
