@@ -4,7 +4,7 @@ import { post } from '@/network/index';
 
 // 定义用户信息的类型
 interface User {
-  id: number;
+  id: string;
   username: string;
   email: string;
   gender: string;
@@ -15,7 +15,7 @@ interface Project {
   editTime: string;
   file: string;
   folderId: number;
-  id: number;
+  id: string;
   isDelete: number;
   isPublic: number;
   projectName: string;
@@ -25,7 +25,7 @@ interface Project {
 // 定义并导出 Store
 export const useUserStore = defineStore('user', () => {
   const user = ref<User>({
-    id: 0,
+    id: '0',
     username: '',
     email: '',
     gender: '',
@@ -33,7 +33,7 @@ export const useUserStore = defineStore('user', () => {
     registerTime: '',
   });
   const editingProject = ref<Project>({
-    id: 0,
+    id: '0',
     userId: 0,
     projectName: '',
     projectUrl: '',
@@ -110,9 +110,20 @@ export const useUserStore = defineStore('user', () => {
     editingProject.value.editTime = getFormattedDate();
   };
   const uploadProject = () => {
+    console.log(editingProject.value);
     post(
       '/project/modify',
-      editingProject.value,
+      {
+        id: editingProject.value.id,
+        userId: editingProject.value.userId,
+        projectName: editingProject.value.projectName,
+        projectUrl: editingProject.value.projectUrl,
+        isDelete: editingProject.value.isDelete,
+        isPublic: editingProject.value.isPublic,
+        fileUrl: editingProject.value.file,
+        folderId: editingProject.value.folderId,
+      },
+
       (res: any) => {
         console.log(res);
       },
@@ -124,7 +135,9 @@ export const useUserStore = defineStore('user', () => {
   const saveTemplate = () => {
     post(
       '/template/create',
-      editingProject.value,
+      {
+        id: editingProject.value.id,
+      },
       (res: any) => {
         console.log(res);
       },
@@ -133,10 +146,14 @@ export const useUserStore = defineStore('user', () => {
       }
     );
   };
+  const setEditingProjectName = (newName: string) => {
+    editingProject.value.projectName = newName;
+  };
   return {
     user,
     getUser,
     setUser,
+    editingProject,
     haveProject,
     updateUserEmail,
     setEditingProject,
@@ -149,5 +166,6 @@ export const useUserStore = defineStore('user', () => {
     updateDate,
     uploadProject,
     saveTemplate,
+    setEditingProjectName,
   };
 });

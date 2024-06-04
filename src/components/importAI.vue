@@ -69,13 +69,20 @@
         ></Icon>
         <span v-else style="font-size: 24px">{{ genView.percent }}%</span>
       </Circle>
-      <img
-        v-else
-        :src="genView.output"
-        style="max-width: 100%; height: auto; cursor: pointer"
-        @click="addItem"
-        @dragend="dragItem"
-      />
+      <div v-else>
+        <img
+          :src="genView.output"
+          style="max-width: 100%; height: auto; cursor: pointer"
+          @click="addItem"
+          @dragend="dragItem"
+        />
+        <!-- 功能 -->
+        <div style="display: flex; justify-content: space-between">
+          <n-button type="primary" size="small" tertiary @click="addElement">立即添加</n-button>
+          <n-button type="info" size="small" tertiary @click="saveElement">保存元素</n-button>
+          <n-button type="error" size="small" tertiary @click="generatePoster">重新生成</n-button>
+        </div>
+      </div>
     </Card>
 
     <!-- 文本输入区域 -->
@@ -353,7 +360,8 @@ import { Input, Modal } from 'view-ui-plus';
 import { fabric } from 'fabric';
 import { v4 as uuid } from 'uuid';
 import useSelect from '@/hooks/select';
-
+import { SaveOutline } from '@vicons/ionicons5';
+import { post, postFormData } from '@/network/index';
 const { canvasEditor }: { canvasEditor: any } = useSelect();
 
 const defaultPosition = {
@@ -586,6 +594,106 @@ const addItem = (e: Event) => {
     canvasEditor.canvas.requestRenderAll();
   });
 };
+const addElement = () => {
+  // const target = genView.output as unknown as HTMLImageElement;
+  const url = genView.output;
+  fabric.loadSVGFromURL(url, (objects, options) => {
+    const item = fabric.util.groupSVGElements(objects, {
+      ...options,
+      ...defaultPosition,
+      id: uuid(),
+      name: 'svg元素',
+    });
+    canvasEditor.canvas.add(item);
+    canvasEditor.canvas.setActiveObject(item);
+    canvasEditor.canvas.requestRenderAll();
+  });
+};
+// 将SVG链接转换为PNG并返回数据URL
+async function svgUrlToPng(svgUrl: string, width: number, height: number): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+
+    img.crossOrigin = 'anonymous'; // 避免跨域问题
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const context = canvas.getContext('2d');
+      if (context) {
+        context.drawImage(img, 0, 0, width, height);
+        const pngDataUrl = canvas.toDataURL('image/png');
+        resolve(pngDataUrl);
+      } else {
+        reject(new Error('Canvas context is null'));
+      }
+    };
+
+    img.onerror = (error) => {
+      reject(error);
+    };
+
+    img.src = svgUrl;
+  });
+}
+// 将SVG URL获取为文件对象
+async function fetchSvgAsFile(svgUrl: string, filename: string): Promise<File> {
+  const response = await fetch(svgUrl);
+  const svgText = await response.text();
+  const blob = new Blob([svgText], { type: 'image/svg+xml' });
+  return new File([blob], filename, { type: 'image/svg+xml' });
+}
+
+// 将数据URL转换为File对象
+function dataUrlToFile(dataUrl: string, filename: string): File {
+  const arr = dataUrl.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new File([u8arr], filename, { type: mime });
+}
+const saveElement = async () => {
+  //TODO
+  // 1. 将SVG URL转换为PNG数据URL
+  const pngDataUrl = await svgUrlToPng(genView.output, 600, 600);
+
+  // 2. 将PNG数据URL转换为File对象
+  const pngFile = dataUrlToFile(pngDataUrl, 'image.png');
+
+  // 3. 使用axios发送File对象
+  const formData = new FormData();
+  formData.append('file', pngFile);
+  formData.append('fileName', 'png');
+  await post('/element/upload', formData, async (res: any) => {
+    var pngUrl = res.res;
+    const formData2 = new FormData();
+    const svgfile = await fetchSvgAsFile(genView.output, 'image.svg');
+    formData2.append('file', svgfile);
+    formData2.append('fileName', 'svg');
+    await post('/element/upload', formData, async (res2: any) => {
+      var svgUrl = res.res;
+      post('/element/save', {
+        fileName: 'sss',
+        filePath: svgUrl,
+        isPublic: false,
+        pngPath: pngUrl,
+      });
+    });
+  });
+};
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.upload-button {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 99;
+}
+</style>
