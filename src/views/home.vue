@@ -261,6 +261,7 @@ const searchValue = ref('');
 const search = () => {
   searchModal2.value = true;
   console.log(searchValue.value);
+  post('/template/search', { value: searchValue.value, pageNo: 1 }, (res) => {});
 };
 const slides = ref([
   {

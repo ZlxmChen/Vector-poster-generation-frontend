@@ -127,13 +127,8 @@ class ServersPlugin {
     downFile(fileStr, 'json');
   }
   async getJsonStringsify(): Promise<string> {
-    const dataUrl = this.getJson();
-    // 把文本 text 转为 textgroup，让导入可以编辑
-    await transformText(dataUrl.objects);
-    const fileStr = `data:text/json;charset=utf-8,${encodeURIComponent(
-      JSON.stringify(dataUrl, null, '\t')
-    )}`;
-    return fileStr;
+    const jsonStr = this.getJson();
+    return JSON.stringify(jsonStr, null, '\t');
   }
 
   async getCanvasData() {
@@ -233,7 +228,7 @@ class ServersPlugin {
         // 老项目
         //更新照片
         const formData = new FormData();
-        formData.append('file', await this.getImgFile());
+        formData.append('img', await this.getImgFile());
         formData.append('id', userStore.user.id.toString());
 
         postFormData('/project/img', formData, async (res2: any) => {
@@ -252,8 +247,7 @@ class ServersPlugin {
         post('/project/create', { name: 'sss', isPublic: 0 }, async (res: any) => {
           //更新照片
           const formData = new FormData();
-          const jsonString = // 等待获取 JSON 字符串
-            formData.append('file', await this.getImgFile());
+          formData.append('img', await this.getImgFile());
           formData.append('id', res.id);
           postFormData('/project/img', formData, async (res2: any) => {
             console.log('res2', res2);

@@ -361,7 +361,7 @@ import { fabric } from 'fabric';
 import { v4 as uuid } from 'uuid';
 import useSelect from '@/hooks/select';
 import { SaveOutline } from '@vicons/ionicons5';
-
+import { post, postFormData } from '@/network/index';
 const { canvasEditor }: { canvasEditor: any } = useSelect();
 
 const defaultPosition = {
@@ -609,8 +609,84 @@ const addElement = () => {
     canvasEditor.canvas.requestRenderAll();
   });
 };
+// 将SVG链接转换为PNG并返回数据URL
+async function svgUrlToPng(svgUrl: string, width: number, height: number): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
 
-const saveElement = () => {};
+    img.crossOrigin = 'anonymous'; // 避免跨域问题
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const context = canvas.getContext('2d');
+      if (context) {
+        context.drawImage(img, 0, 0, width, height);
+        const pngDataUrl = canvas.toDataURL('image/png');
+        resolve(pngDataUrl);
+      } else {
+        reject(new Error('Canvas context is null'));
+      }
+    };
+
+    img.onerror = (error) => {
+      reject(error);
+    };
+
+    img.src = svgUrl;
+  });
+}
+// 将SVG URL获取为文件对象
+async function fetchSvgAsFile(svgUrl: string, filename: string): Promise<File> {
+  const response = await fetch(svgUrl);
+  const svgText = await response.text();
+  const blob = new Blob([svgText], { type: 'image/svg+xml' });
+  return new File([blob], filename, { type: 'image/svg+xml' });
+}
+
+// 将数据URL转换为File对象
+function dataUrlToFile(dataUrl: string, filename: string): File {
+  const arr = dataUrl.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new File([u8arr], filename, { type: mime });
+}
+const saveElement = async () => {
+  //TODO
+  // 1. 将SVG URL转换为PNG数据URL
+  const pngDataUrl = await svgUrlToPng(genView.output, 600, 600);
+
+  // 2. 将PNG数据URL转换为File对象
+  const pngFile = dataUrlToFile(pngDataUrl, 'image.png');
+
+  // 3. 使用axios发送File对象
+  const formData = new FormData();
+  formData.append('file', pngFile);
+  formData.append('fileName', 'png');
+  await post('/element/upload', formData, async (res: any) => {
+    var pngUrl = res.res;
+    const formData2 = new FormData();
+    const svgfile = await fetchSvgAsFile(genView.output, 'image.svg');
+    formData2.append('file', svgfile);
+    formData2.append('fileName', 'svg');
+    await post('/element/upload', formData, async (res2: any) => {
+      var svgUrl = res.res;
+      post('/element/save', {
+        fileName: 'sss',
+        filePath: svgUrl,
+        isPublic: false,
+        pngPath: pngUrl,
+      });
+    });
+  });
+};
 </script>
 
 <style scoped lang="less">
