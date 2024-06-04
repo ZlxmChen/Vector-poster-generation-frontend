@@ -20,11 +20,16 @@
           <DropdownItem name="saveImg">{{ $t('save_as_picture') }}</DropdownItem>
           <DropdownItem name="saveSvg">{{ $t('save_as_svg') }}</DropdownItem>
           <DropdownItem name="saveJson">{{ $t('save_as_json') }}</DropdownItem>
-          <DropdownItem name="saveProject" divided>{{ $t('save_project') }}</DropdownItem>
-          <DropdownItem name="saveTemplate">{{ $t('save_template') }}</DropdownItem>
+          <DropdownItem name="modifyProjectName" divided>{{ $t('save_project') }}</DropdownItem>
+          <DropdownItem name="modifyTemplateName">{{ $t('save_template') }}</DropdownItem>
         </DropdownMenu>
       </template>
     </Dropdown>
+    <Modal v-model="modal" title="输入名称" @on-ok="gotoSave" @on-cancel="cancel">
+      <div style="display: flex; justify-content: center">
+        <Input v-model="newName" placeholder="输入名称" style="width: 300px" />
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -35,9 +40,12 @@ import useSelect from '@/hooks/select';
 import { debounce } from 'lodash-es';
 import { useI18n } from 'vue-i18n';
 // import { downloadFile } from '@/utils/utils';
-
+import { useUserStore } from '@/stores/userStore';
+const userStore = useUserStore();
 const { t } = useI18n();
-
+const modal = ref(false);
+const type = ref(0);
+const newName = ref('');
 const { canvasEditor } = useSelect();
 const cbMap = {
   clipboard() {
@@ -55,23 +63,35 @@ const cbMap = {
   saveImg() {
     canvasEditor.saveImg();
   },
-  saveProject() {
-    console.log('saveProject');
-    canvasEditor.saveProject();
+  modifyProjectName() {
+    if (userStore.haveProject) this.saveProject();
+    else modal.value = true;
+    type.value = 0;
+  },
+  modifyTemplateName() {
+    modal.value = true;
+    type.value = 1;
   },
 };
 
 const saveWith = debounce(function (type) {
   cbMap[type] && typeof cbMap[type] === 'function' && cbMap[type]();
 }, 300);
-
+const gotoSave = () => {
+  if (type.value == 0) {
+    userStore.setEditingProjectName(newName.value);
+    canvasEditor.saveProject();
+  } else {
+    canvasEditor.saveTemplate();
+  }
+};
 /**
  * @desc clear canvas 清空画布
  */
 const clear = () => {
   canvasEditor.clear();
 };
-
+const modifyName = () => {};
 const beforeClear = () => {
   Modal.confirm({
     title: t('tip'),

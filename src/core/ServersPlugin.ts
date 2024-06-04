@@ -127,13 +127,9 @@ class ServersPlugin {
     downFile(fileStr, 'json');
   }
   async getJsonStringsify(): Promise<string> {
-    const dataUrl = this.getJson();
-    // 把文本 text 转为 textgroup，让导入可以编辑
-    await transformText(dataUrl.objects);
-    const fileStr = `data:text/json;charset=utf-8,${encodeURIComponent(
-      JSON.stringify(dataUrl, null, '\t')
-    )}`;
-    return fileStr;
+    const jsonStr = this.getJson();
+    console.log(JSON.stringify(jsonStr, null, '\t'));
+    return JSON.stringify(jsonStr, null, '\t');
   }
 
   async getCanvasData() {
@@ -224,19 +220,81 @@ class ServersPlugin {
       Message.info('请先保存项目在保存为模板');
     }
   }
+
+  async compressImage(file: File, maxWidth: number, maxHeight: number): Promise<File> {
+    return new Promise<File>((resolve, reject) => {
+      const img = new Image();
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        img.src = event.target?.result as string;
+
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+
+          if (!ctx) {
+            reject(new Error('Canvas context is null'));
+            return;
+          }
+
+          // Calculate the new dimensions while maintaining the aspect ratio
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxWidth || height > maxHeight) {
+            const aspectRatio = width / height;
+            if (width > height) {
+              width = maxWidth;
+              height = maxWidth / aspectRatio;
+            } else {
+              height = maxHeight;
+              width = maxHeight * aspectRatio;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const compressedFile = new File([blob], file.name, { type: 'image/png' });
+              resolve(compressedFile);
+            } else {
+              reject(new Error('Compression failed'));
+            }
+          }, 'image/png');
+        };
+
+        img.onerror = (error) => {
+          reject(error);
+        };
+      };
+
+      reader.onerror = (error) => {
+        reject(error);
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
+
   async saveProject() {
     console.log('保存项目');
     try {
       // 判断是否是新项目
+      console.log('haveProject', userStore.haveProject);
       if (userStore.haveProject) {
         // 老项目
         //更新照片
         const formData = new FormData();
-        formData.append('file', await this.getImgFile());
+        formData.append('img', await this.compressImage(await this.getImgFile(), 800, 800));
         formData.append('id', userStore.user.id.toString());
 
-        postFormData('/template/img', formData, async (res2: any) => {
+        postFormData('/project/img', formData, async (res2: any) => {
           //设置editingOroject
+          console.log(res2.imgUr);
           userStore.setHaveProject(true);
           //更新照片链接
           userStore.setProjectUrl(res2.imgUr);
@@ -248,30 +306,36 @@ class ServersPlugin {
         });
       } else {
         console.log('新项目');
-        post('/project/create', { name: 'sss', isPublic: 0 }, async (res: any) => {
-          //更新照片
-          const formData = new FormData();
-          const jsonString = // 等待获取 JSON 字符串
-            formData.append('file', await this.getImgFile());
-          formData.append('id', res.id);
-          postFormData('/template/img', formData, async (res2: any) => {
-            console.log('res2', res2);
-            //设置项目信息
-            userStore.setEditingProject({
-              id: res.id,
-              userId: userStore.user.id,
-              projectName: 'sss',
-              projectUrl: res2.imgUrl,
-              isDelete: 0,
-              isPublic: 0,
-              file: await this.getJsonStringsify(),
-              editTime: userStore.getFormattedDate(),
-              folderId: 0,
+        post(
+          '/project/create',
+          {
+            name: userStore.editingProject.projectName,
+            isPublic: userStore.editingProject.isPublic,
+          },
+          async (res: any) => {
+            //更新照片
+            const formData = new FormData();
+            formData.append('img', await this.compressImage(await this.getImgFile(), 800, 800));
+            formData.append('id', res.id);
+            postFormData('/project/img', formData, async (res2: any) => {
+              console.log('res2', res2);
+              //设置项目信息
+              userStore.setEditingProject({
+                id: res.id,
+                userId: userStore.user.id,
+                projectName: 'sss',
+                projectUrl: res2.imgUrl,
+                isDelete: 0,
+                isPublic: 0,
+                file: await this.getJsonStringsify(),
+                editTime: userStore.getFormattedDate(),
+                folderId: 0,
+              });
+              //上传项目
+              userStore.uploadProject();
             });
-            //上传项目
-            userStore.uploadProject();
-          });
-        });
+          }
+        );
       }
       // 新项目的逻辑可以在这里添加
     } catch (error) {
