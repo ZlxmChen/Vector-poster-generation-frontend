@@ -77,7 +77,7 @@
       <Slide v-for="(slide, i) in slides" :index="i" :key="i">
         <div class="slide-card">
           <img class="slide-img" :src="slide.src" />
-          <p @click="blankCanvasSetSize()">{{ slide.name }}</p>
+          <p @click="blankCanvasSetSize(slide)">{{ slide.name }}</p>
         </div>
       </Slide>
 
@@ -336,14 +336,14 @@ const slides = ref([
   },
 ]);
 
-const blankCanvasSetSize = () => {
+const blankCanvasSetSize = (slide) => {
   layoutStore.setCollapsed(true);
   router.push({
     name: 'editer',
     params: {
       command: JSON.stringify({
-        height: 240,
-        width: 240,
+        height: slide.y,
+        width: slide.x,
       }),
     },
   });
@@ -543,7 +543,7 @@ const goTemplate = () => {
 .slide-img-project {
   height: 100%;
   width: 50%;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 10px;
   margin-right: 40px;
 }
@@ -598,7 +598,7 @@ const goTemplate = () => {
 .slide-img-template {
   height: 100%;
   width: 50%;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 10px;
   margin-right: 40px;
 }

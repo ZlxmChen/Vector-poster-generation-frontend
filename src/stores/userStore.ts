@@ -110,6 +110,7 @@ export const useUserStore = defineStore('user', () => {
     editingProject.value.editTime = getFormattedDate();
   };
   const uploadProject = () => {
+    console.log(editingProject.value);
     post(
       '/project/modify',
       {
@@ -134,7 +135,9 @@ export const useUserStore = defineStore('user', () => {
   const saveTemplate = () => {
     post(
       '/template/create',
-      editingProject.value,
+      {
+        id: editingProject.value.id,
+      },
       (res: any) => {
         console.log(res);
       },
@@ -143,10 +146,14 @@ export const useUserStore = defineStore('user', () => {
       }
     );
   };
+  const setEditingProjectName = (newName: string) => {
+    editingProject.value.projectName = newName;
+  };
   return {
     user,
     getUser,
     setUser,
+    editingProject,
     haveProject,
     updateUserEmail,
     setEditingProject,
@@ -159,5 +166,6 @@ export const useUserStore = defineStore('user', () => {
     updateDate,
     uploadProject,
     saveTemplate,
+    setEditingProjectName,
   };
 });
