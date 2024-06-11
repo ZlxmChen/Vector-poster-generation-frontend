@@ -253,6 +253,8 @@ import { NIcon, NButton, NImage, NDropdown } from 'naive-ui';
 import { get, post } from '@/network/index.js';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
+import { formatTimestamp } from '@/utils/utils';
+
 const router = useRouter();
 const userStore = useUserStore();
 
@@ -357,7 +359,7 @@ const setActiveTab = (key, folder = 'all') => {
             name: project.projectName,
             src: project.projectUrl,
             isPublic: project.isPublic == 1 ? '公开' : '私有',
-            editTime: project.editTime,
+            editTime: formatTimestamp(project.editTime),
             userId: project.userId,
             projectUrl: project.projectUrl,
             isDelete: project.isDelete,
@@ -400,7 +402,7 @@ const setActiveTab = (key, folder = 'all') => {
             folderId: template.folderId,
             isPublic: template.isPublic == 1 ? '公开' : '私有',
             fileUrl: template.fileUrl,
-            editTime: template.createTime,
+            editTime: formatTimestamp(template.editTime),
           }));
 
           console.log(dataRef.value);
@@ -439,7 +441,7 @@ const setActiveTab = (key, folder = 'all') => {
             src: element.elementUrl,
             isPublic: element.isPublic == 1 ? '公开' : '私有',
             folderId: element.folderId,
-            editTime: element.createTime,
+            editTime: formatTimestamp(element.createTime),
             prompt: element.prompt,
           }));
           console.log(dataRef.value);
