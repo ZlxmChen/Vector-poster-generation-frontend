@@ -180,6 +180,7 @@ const search = () => {
 const dragItem = (event: Event) => {
   const target = event.target as HTMLImageElement;
   const url = target.src;
+
   // 会有性能开销 dragAddItem复用更简洁
   fabric.loadSVGFromURL(url, (objects) => {
     const item = fabric.util.groupSVGElements(objects, {
@@ -191,6 +192,7 @@ const dragItem = (event: Event) => {
     canvasEditor.dragAddItem(event, item);
   });
 };
+
 const dragItemAPI = (id: String) => {
   post(
     '/element/get',
@@ -198,14 +200,17 @@ const dragItemAPI = (id: String) => {
     (res: any) => {
       console.log(res);
       const url = res.res;
-      fabric.loadSVGFromURL(url, (objects) => {
+      console.log(url);
+      fabric.loadSVGFromURL(url, (objects, options) => {
         const item = fabric.util.groupSVGElements(objects, {
-          shadow: '',
-          fontFamily: 'arial',
+          ...options,
+          ...defaultPosition,
           id: uuid(),
           name: 'svg元素',
         });
-        canvasEditor.dragAddItem(event, item);
+        canvasEditor.canvas.add(item);
+        canvasEditor.canvas.setActiveObject(item);
+        canvasEditor.canvas.requestRenderAll();
       });
     },
     (err) => {
@@ -216,7 +221,6 @@ const dragItemAPI = (id: String) => {
 // 按照类型渲染
 const addItem = (e: Event) => {
   const target = e.target as HTMLImageElement;
-  console.log(target);
   const url = target.src;
   fabric.loadSVGFromURL(url, (objects, options) => {
     const item = fabric.util.groupSVGElements(objects, {

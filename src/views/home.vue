@@ -49,7 +49,7 @@
               <i></i>
             </div>
             <div class="page-index">
-              <Page :total="(10 * projectList.length) / 10" v-model="searchProjectPageIndex" />
+              <Page :total="2" v-model="searchProjectPageIndex" />
             </div>
           </n-tab-pane>
           <n-tab-pane name="template" tab="模板">
@@ -66,7 +66,7 @@
               <i></i>
             </div>
             <div class="page-index">
-              <Page :total="(10 * myTemplateList.length) / 10" v-model="searchTemplatePageIndex" />
+              <Page :total="2" v-model="searchTemplatePageIndex" />
             </div>
           </n-tab-pane>
           <n-tab-pane name="element" tab="元素">
@@ -83,7 +83,7 @@
               <i></i>
             </div>
             <div class="page-index">
-              <Page :total="(10 * myTemplateList.length) / 10" v-model="searchElementPageIndex" />
+              <Page :total="2" v-model="searchElementPageIndex" />
             </div>
           </n-tab-pane>
         </n-tabs>
@@ -291,11 +291,11 @@ const search = () => {
   });
   post('/project/search', { value: searchValue.value, pageNo: 1 }, (res) => {
     console.log(res);
-    searchProjectList.value = res.list;
+    searchProjectList.value = res.projectList;
   });
   post('/element/search', { value: searchValue.value, pageNo: 1 }, (res) => {
     console.log(res);
-    searchElementList.value = res.list;
+    searchElementList.value = res.elementList;
   });
 };
 const slides = ref([

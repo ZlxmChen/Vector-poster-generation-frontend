@@ -1,5 +1,5 @@
 <template>
-  <div class="layout">
+  <div class="layout" ref="vantaRef">
     <n-layout has-sider>
       <n-layout-sider
         collapse-mode="width"
@@ -89,19 +89,26 @@ import { RouterLink } from 'vue-router';
  * @param icon 图标组件
  * @returns 返回一个函数，用于渲染图标组件
  */
-import { h, ref, onMounted } from 'vue';
+import { h, ref, onMounted, onBeforeUnmount } from 'vue';
 import { NIcon } from 'naive-ui';
 import { useLayoutStore } from '@/stores/layout';
 import { get } from '@/network/index';
+import * as THREE from 'three'; //导入样式
+import BIRDS from 'vanta/src/vanta.birds'; //导入动态样式逻辑
 const layoutStore = useLayoutStore();
 function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) });
 }
-
+onBeforeUnmount(() => {
+  if (vantaEffect) {
+    vantaEffect.destroy();
+  }
+});
 const activeKey = ref('go-back-home'); // 当前激活的菜单项
 import { useUserStore } from '@/stores/userStore';
 const userStore = useUserStore();
-
+const vantaRef = ref(null);
+let vantaEffect = null;
 onMounted(() => {
   get('/user/profile', {}, (res) => {
     console.log(res);
@@ -113,6 +120,18 @@ onMounted(() => {
       avatarUrl: res.avatarUrl,
       registerTime: res.registerTime,
     });
+  });
+  vantaEffect = VANTA.BIRDS({
+    el: vantaRef.value,
+    THREE: THREE,
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.0,
+    minWidth: 200.0,
+    scale: 1.0,
+    color1: 14381274,
+    color2: 16443110,
   });
 });
 // 菜单项
