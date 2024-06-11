@@ -37,7 +37,7 @@
         <n-tabs type="segment" animated>
           <n-tab-pane name="project" tab="项目">
             <div class="search-tab">
-              <div class="search-item" v-for="project in searchProject" :key="project.id">
+              <div class="search-item" v-for="project in searchProjectList" :key="project.id">
                 <img :src="project.projectUrl" alt="project-preview" />
 
                 <p @click="openProject(project)">{{ project.projectName }}</p>
@@ -54,7 +54,7 @@
           </n-tab-pane>
           <n-tab-pane name="template" tab="模板">
             <div class="search-tab">
-              <div class="search-item" v-for="template in searchTemplate" :key="template.id">
+              <div class="search-item" v-for="template in searchTemplateList" :key="template.id">
                 <img :src="template.templateUrl" alt="template-preview" />
 
                 <p @click="openTemplate(template)">{{ template.templateName }}</p>
@@ -69,7 +69,23 @@
               <Page :total="(10 * myTemplateList.length) / 10" v-model="searchTemplatePageIndex" />
             </div>
           </n-tab-pane>
-          <n-tab-pane name="element" tab="元素"></n-tab-pane>
+          <n-tab-pane name="element" tab="元素">
+            <div class="search-tab">
+              <div class="search-item" v-for="element in searchElementList" :key="element.id">
+                <img :src="element.elementUrl" alt="template-preview" />
+
+                <p @click="openTemplate(element)">{{ element.elementName }}</p>
+              </div>
+              <i></i>
+              <i></i>
+              <i></i>
+              <i></i>
+              <i></i>
+            </div>
+            <div class="page-index">
+              <Page :total="(10 * myTemplateList.length) / 10" v-model="searchElementPageIndex" />
+            </div>
+          </n-tab-pane>
         </n-tabs>
       </div>
     </transition>
@@ -244,10 +260,7 @@ const searchProjectPageIndex = ref(1);
 const searchProjectList = ref([]);
 const searchProject = computed(() => {
   //显示projectList中前10个数据
-  return searchProjectList.value.slice(
-    0 + 10 * (searchProjectPageIndex.value - 1),
-    10 * searchProjectPageIndex.value
-  );
+  return searchProjectList;
 });
 const searchTemplatePageIndex = ref(1);
 const searchTemplateList = ref([]);
@@ -258,13 +271,31 @@ const searchTemplate = computed(() => {
     10 * searchTemplatePageIndex.value
   );
 });
+const searchElementPageIndex = ref(1);
+const searchElementList = ref([]);
+const searchElement = computed(() => {
+  //显示elementList中前10个数据
+  return searchElementList.value.slice(
+    0 + 10 * (searchElementPageIndex.value - 1),
+    10 * searchElementPageIndex.value
+  );
+});
 const searchValue = ref('');
 
 const search = () => {
   searchModal2.value = true;
   console.log(searchValue.value);
   post('/template/search', { value: searchValue.value, pageNo: 1 }, (res) => {
+    console.log(res);
     searchTemplateList.value = res.list;
+  });
+  post('/project/search', { value: searchValue.value, pageNo: 1 }, (res) => {
+    console.log(res);
+    searchProjectList.value = res.list;
+  });
+  post('/element/search', { value: searchValue.value, pageNo: 1 }, (res) => {
+    console.log(res);
+    searchElementList.value = res.list;
   });
 };
 const slides = ref([

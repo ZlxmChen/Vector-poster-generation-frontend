@@ -294,10 +294,10 @@ class ServersPlugin {
 
         postFormData('/project/img', formData, async (res2: any) => {
           //设置editingOroject
-          console.log(res2.imgUr);
+          console.log(res2.imgUrl);
           userStore.setHaveProject(true);
           //更新照片链接
-          userStore.setProjectUrl(res2.imgUr);
+          userStore.setProjectUrl(res2.imgUrl);
           //更新project编辑时间
           userStore.updateDate();
           //更新项目内容

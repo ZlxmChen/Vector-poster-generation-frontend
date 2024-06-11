@@ -287,6 +287,12 @@
           @click="addItem"
           @dragend="dragItem"
         />
+        <!-- 功能 -->
+        <div style="display: flex; justify-content: space-between">
+          <n-button type="primary" size="small" tertiary @click="addElement">立即添加</n-button>
+          <n-button type="info" size="small" tertiary @click="saveElement">保存元素</n-button>
+          <n-button type="error" size="small" tertiary @click="generatePoster">重新生成</n-button>
+        </div>
       </div>
     </Card>
 
@@ -362,6 +368,7 @@ import { v4 as uuid } from 'uuid';
 import useSelect from '@/hooks/select';
 import { SaveOutline } from '@vicons/ionicons5';
 import { post, postFormData } from '@/network/index';
+import { Message } from 'view-ui-plus';
 const { canvasEditor }: { canvasEditor: any } = useSelect();
 
 const defaultPosition = {
@@ -730,19 +737,27 @@ const saveElement = async () => {
   formData.append('file', pngFile);
   formData.append('fileName', 'png');
   await postFormData('/element/upload', formData, async (res: any) => {
-    var pngUrl = res.res;
+    var pngUrl = res.filePath;
+    console.log(res);
     const formData2 = new FormData();
     const svgfile = await fetchSvgAsFile(genView.output, 'image.svg');
     formData2.append('file', svgfile);
     formData2.append('fileName', 'svg');
     await postFormData('/element/upload', formData2, async (res2: any) => {
-      var svgUrl = res.res;
-      post('/element/save', {
-        fileName: 'element',
-        filePath: svgUrl,
-        isPublic: false,
-        pngPath: pngUrl,
-      });
+      var svgUrl = res2.filePath;
+      console.log(res2);
+      post(
+        '/element/save',
+        {
+          fileName: 'element',
+          filePath: svgUrl,
+          isPublic: false,
+          pngPath: pngUrl,
+        },
+        (res: any) => {
+          Message.success('保存成功');
+        }
+      );
     });
   });
 };

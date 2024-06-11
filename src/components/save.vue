@@ -64,7 +64,7 @@ const cbMap = {
     canvasEditor.saveImg();
   },
   modifyProjectName() {
-    if (userStore.haveProject) this.saveProject();
+    if (userStore.haveProject) canvasEditor.saveProject();
     else modal.value = true;
     type.value = 0;
   },
