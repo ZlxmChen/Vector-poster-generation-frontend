@@ -38,9 +38,13 @@
           <n-tab-pane name="project" tab="项目">
             <div class="search-tab">
               <div class="search-item" v-for="project in searchProjectList" :key="project.id">
-                <img :src="project.projectUrl" alt="project-preview" />
+                <img
+                  :src="project.projectUrl"
+                  alt="project-preview"
+                  @click="openProject(project)"
+                />
 
-                <p @click="openProject(project)">{{ project.projectName }}</p>
+                <p>{{ project.projectName }}</p>
               </div>
               <i></i>
               <i></i>
@@ -55,7 +59,11 @@
           <n-tab-pane name="template" tab="模板">
             <div class="search-tab">
               <div class="search-item" v-for="template in searchTemplateList" :key="template.id">
-                <img :src="template.templateUrl" alt="template-preview" />
+                <img
+                  :src="template.templateUrl"
+                  alt="template-preview"
+                  @click="openTemplate(template)"
+                />
 
                 <p @click="openTemplate(template)">{{ template.templateName }}</p>
               </div>
@@ -74,7 +82,7 @@
               <div class="search-item" v-for="element in searchElementList" :key="element.id">
                 <img :src="element.elementUrl" alt="template-preview" />
 
-                <p @click="openTemplate(element)">{{ element.elementName }}</p>
+                <p>{{ element.elementName }}</p>
               </div>
               <i></i>
               <i></i>
@@ -251,20 +259,20 @@ const settings = ref({
 const breakpoints = ref({
   // 700px and up
   700: {
-    itemsToShow: 1.2,
-    snapAlign: 'center',
-  },
-  800: {
     itemsToShow: 2.2,
     snapAlign: 'center',
   },
-  900: {
+  800: {
     itemsToShow: 3.2,
+    snapAlign: 'center',
+  },
+  900: {
+    itemsToShow: 4.2,
     snapAlign: 'center',
   },
   // 1024 and up
   1024: {
-    itemsToShow: 4.2,
+    itemsToShow: 5.2,
     snapAlign: 'center',
   },
 });

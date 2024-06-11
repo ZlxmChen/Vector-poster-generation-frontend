@@ -149,7 +149,11 @@ const checkColor = (val) => {
       // 控件属性设置
       fabricGradientToCss(val, activeObject);
       // bar背景设置
-      fabricGradientToBar(val);
+      try {
+        fabricGradientToBar(val);
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
 };

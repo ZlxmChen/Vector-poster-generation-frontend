@@ -121,6 +121,24 @@ const handleSubmit = (valid, { email, password, username }) => {
 .login-container {
   display: flex;
   height: 100vh;
+  background: linear-gradient(32deg, #fff1eb 0%, #ace0f9 100%),
+    linear-gradient(90deg, #fff1eb 0%, #ace0f9 100%);
+
+  /* safari 5.1+,chrome 10+ */
+  background: -webkit-linear-gradient(32deg, #fff1eb 0%, #ace0f9 100%),
+    -webkit-linear-gradient(90deg, #fff1eb 0%, #ace0f9 100%);
+
+  /* ff 3.6+ */
+  background: -moz-linear-gradient(32deg, #fff1eb 0%, #ace0f9 100%),
+    -moz-linear-gradient(90deg, #fff1eb 0%, #ace0f9 100%);
+
+  /* opera 11.10+ */
+  background: -o-linear-gradient(32deg, #fff1eb 0%, #ace0f9 100%),
+    -o-linear-gradient(90deg, #fff1eb 0%, #ace0f9 100%);
+
+  /* ie 10+ */
+  background: -ms-linear-gradient(32deg, #fff1eb 0%, #ace0f9 100%),
+    -ms-linear-gradient(90deg, #fff1eb 0%, #ace0f9 100%);
 }
 
 .left-panel {
