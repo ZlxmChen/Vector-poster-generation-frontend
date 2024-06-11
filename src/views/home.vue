@@ -414,6 +414,7 @@ const blankCanvas = () => {
 };
 
 const openTemplate = (temmplate) => {
+  Message.info('正在从模板创建，请稍后');
   post(
     '/template/data',
     { id: temmplate.id },
@@ -432,6 +433,7 @@ const openTemplate = (temmplate) => {
   );
 };
 const openProject = (project) => {
+  Message.info('项目恢复中，请稍后');
   post(
     '/project/data',
     { id: project.id },
