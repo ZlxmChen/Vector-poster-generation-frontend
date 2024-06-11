@@ -137,6 +137,20 @@ const menuOptions = [
         RouterLink,
         {
           to: {
+            path: '/info',
+          },
+        },
+        { default: () => '个人中心' }
+      ),
+    key: 'person-info',
+    icon: renderIcon(PersonOutline),
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
             path: '/space',
           },
         },
