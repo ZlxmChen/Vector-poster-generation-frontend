@@ -89,6 +89,7 @@
 import { LayoutGrid, LayoutList } from '@vicons/tabler';
 import { NIcon, NButton, NImage, NDropdown } from 'naive-ui';
 import { get, post } from '@/network/index.js';
+import { formatTimestamp } from '@/utils/utils';
 
 const renderIcon = (icon) => {
   return () => {
@@ -138,7 +139,7 @@ const setActiveTab = (key) => {
           src: project.projectUrl,
           isPublic: project.isPublic == 1 ? '公开' : '私有',
           fileUrl: project.fileUrl,
-          editTime: project.editTime,
+          editTime: formatTimestamp(project.editTime),
         }));
 
         console.log(dataRef.value);
@@ -156,7 +157,7 @@ const setActiveTab = (key) => {
           folderId: template.folderId,
           isPublic: template.isPublic == 1 ? '公开' : '私有',
           fileUrl: template.fileUrl,
-          editTime: template.createTime,
+          editTime: formatTimestamp(template.createTime),
         }));
 
         console.log(dataRef.value);
@@ -173,7 +174,7 @@ const setActiveTab = (key) => {
           src: element.elementUrl,
           isPublic: element.isPublic == 1 ? '公开' : '私有',
           folderId: element.folderId,
-          editTime: element.creatTime,
+          editTime: formatTimestamp(element.creatTime),
           prompt: element.prompt,
         }));
 
