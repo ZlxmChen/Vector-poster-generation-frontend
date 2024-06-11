@@ -24,7 +24,21 @@
         @on-change="search"
       />
     </div>
-
+    <Divider plain orientation="left">我的元素</Divider>
+    <Tooltip
+      :content="element.elementName"
+      v-for="(element, i) in elementData"
+      :key="`${i}-bai1-button`"
+      placement="top"
+    >
+      <img
+        class="tmpl-img"
+        :alt="element.elementName"
+        @click="addItemAPI(element.id)"
+        v-lazy="element.elementUrl"
+        @dragend="dragItemAPI(element.id)"
+      />
+    </Tooltip>
     <div :key="item.value" v-for="item in state.materialist">
       <Divider plain orientation="left">{{ item.label }}</Divider>
       <Tooltip
@@ -50,7 +64,8 @@ import useSelect from '@/hooks/select';
 import { cloneDeep } from 'lodash-es';
 import { fabric } from 'fabric';
 import { v4 as uuid } from 'uuid';
-
+import { get, post } from '@/network/index';
+import { onMounted } from 'vue';
 const { canvasEditor }: { canvasEditor: any } = useSelect();
 
 const defaultPosition = {
@@ -59,7 +74,36 @@ const defaultPosition = {
   shadow: '',
   fontFamily: '1-1',
 };
-
+interface Response {
+  elementList: ElementList[];
+  projectList: null;
+  templateList: null;
+  type: null;
+  [property: string]: any;
+}
+interface ElementList {
+  createTime: string;
+  delete: boolean;
+  elementName: string;
+  elementUrl: string;
+  fileUrl: null | string;
+  folderId: string;
+  id: string;
+  isDelete: number;
+  isPublic: number;
+  prompt: string;
+  public: boolean;
+  userId: string;
+  [property: string]: any;
+}
+const elementData = ref<ElementList[]>([]);
+onMounted(() => {
+  get('/element/my', {}, (res: Response) => {
+    console.log('/element/my');
+    console.log(res);
+    elementData.value = res.elementList;
+  });
+});
 interface materialTypeI {
   value: string;
   label: string;
@@ -147,10 +191,32 @@ const dragItem = (event: Event) => {
     canvasEditor.dragAddItem(event, item);
   });
 };
-
+const dragItemAPI = (id: String) => {
+  post(
+    '/element/get',
+    { value: id },
+    (res: any) => {
+      console.log(res);
+      const url = res.res;
+      fabric.loadSVGFromURL(url, (objects) => {
+        const item = fabric.util.groupSVGElements(objects, {
+          shadow: '',
+          fontFamily: 'arial',
+          id: uuid(),
+          name: 'svg元素',
+        });
+        canvasEditor.dragAddItem(event, item);
+      });
+    },
+    (err) => {
+      console.log('err:' + err);
+    }
+  );
+};
 // 按照类型渲染
 const addItem = (e: Event) => {
   const target = e.target as HTMLImageElement;
+  console.log(target);
   const url = target.src;
   fabric.loadSVGFromURL(url, (objects, options) => {
     const item = fabric.util.groupSVGElements(objects, {
@@ -163,6 +229,31 @@ const addItem = (e: Event) => {
     canvasEditor.canvas.setActiveObject(item);
     canvasEditor.canvas.requestRenderAll();
   });
+};
+
+const addItemAPI = (id: String) => {
+  post(
+    '/element/get',
+    { value: id },
+    (res: any) => {
+      console.log(res);
+      const url = res.res;
+      fabric.loadSVGFromURL(url, (objects, options) => {
+        const item = fabric.util.groupSVGElements(objects, {
+          ...options,
+          ...defaultPosition,
+          id: uuid(),
+          name: 'svg元素',
+        });
+        canvasEditor.canvas.add(item);
+        canvasEditor.canvas.setActiveObject(item);
+        canvasEditor.canvas.requestRenderAll();
+      });
+    },
+    (err) => {
+      console.log('err:' + err);
+    }
+  );
 };
 </script>
 

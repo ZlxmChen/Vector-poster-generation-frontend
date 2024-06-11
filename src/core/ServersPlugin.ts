@@ -289,15 +289,15 @@ class ServersPlugin {
         // 老项目
         //更新照片
         const formData = new FormData();
-        formData.append('img', await this.compressImage(await this.getImgFile(), 800, 800));
+        formData.append('img', await this.compressImage(await this.getImgFile(), 400, 400));
         formData.append('id', userStore.user.id.toString());
 
         postFormData('/project/img', formData, async (res2: any) => {
           //设置editingOroject
-          console.log(res2.imgUr);
+          console.log(res2.imgUrl);
           userStore.setHaveProject(true);
           //更新照片链接
-          userStore.setProjectUrl(res2.imgUr);
+          userStore.setProjectUrl(res2.imgUrl);
           //更新project编辑时间
           userStore.updateDate();
           //更新项目内容

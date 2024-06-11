@@ -60,6 +60,7 @@
 <script setup>
 import { get, post } from '@/network/index';
 import NotiDispaly from './notifyDisplay';
+import { formatTimestamp } from '@/utils/utils';
 const curActiveTab = ref('all');
 const isGetAllNoti = ref(true);
 
@@ -88,7 +89,7 @@ function getAllNotification(isGetAll) {
         title: noti.title,
         content: noti.content,
         type: noti.type,
-        sentAt: noti.sentAt,
+        sentAt: formatTimestamp(noti.sentAt),
         isRead: noti.read,
       }));
     }).then(() => {
@@ -102,7 +103,7 @@ function getAllNotification(isGetAll) {
         title: noti.title,
         content: noti.content,
         type: noti.type,
-        sentAt: noti.sentAt,
+        sentAt: formatTimestamp(noti.sentAt),
         isRead: noti.read,
       }));
     }).then(() => {

@@ -64,13 +64,12 @@ const cbMap = {
     canvasEditor.saveImg();
   },
   modifyProjectName() {
-    if (userStore.haveProject) this.saveProject();
+    if (userStore.haveProject) canvasEditor.saveProject();
     else modal.value = true;
     type.value = 0;
   },
   modifyTemplateName() {
-    modal.value = true;
-    type.value = 1;
+    canvasEditor.saveTemplate();
   },
 };
 
