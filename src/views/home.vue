@@ -446,10 +446,10 @@ const openProject = (project) => {
 };
 
 const goProject = () => {
-  router.push('/project');
+  router.push('/space/my');
 };
 const goTemplate = () => {
-  router.push('/template');
+  router.push('/space/my');
 };
 </script>
 
