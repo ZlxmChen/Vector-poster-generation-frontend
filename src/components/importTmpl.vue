@@ -166,7 +166,7 @@ const beforeClearTipAPI = (tmpId: string) => {
         content: `<p>${t('replaceTip')}</p>`,
         okText: t('ok'),
         cancelText: t('cancel'),
-        onOk: () => getTempData(res.file),
+        onOk: () => canvasEditor.insertSvgFile(res.file),
       });
     },
     (err) => {
