@@ -20,6 +20,22 @@
         @on-change="search"
       />
     </div>
+    <div :key="templateList.id" v-for="templateList in templateData">
+      <Divider plain orientation="left">{{ templateList.folderName }}</Divider>
+      <Tooltip
+        :content="temp.label"
+        v-for="(temp, i) in templateList.list"
+        :key="`${i}-bai1-button`"
+        placement="top"
+      >
+        <img
+          class="tmpl-img"
+          :alt="temp.templateName"
+          v-lazy="temp.templateUrl"
+          @click="beforeClearTipAPI(temp.id)"
+        />
+      </Tooltip>
+    </div>
 
     <div :key="item.value" v-for="item in state.materialist">
       <Divider plain orientation="left">{{ item.label }}</Divider>
@@ -46,10 +62,50 @@ import axios from 'axios';
 import { Spin, Modal } from 'view-ui-plus';
 import { useI18n } from 'vue-i18n';
 import { cloneDeep } from 'lodash-es';
-
+import { get, post } from '@/network/index';
+import { onMounted } from 'vue';
 const { t } = useI18n();
 const { canvasEditor }: { canvasEditor: any } = useSelect();
+/**
+ * template/all
+ */
 
+interface Datum {
+  folderName: string;
+  id: string;
+  list: List[];
+  [property: string]: any;
+}
+
+interface List {
+  createTime: string;
+  delete: boolean;
+  fileUrl: null;
+  folderId: string;
+  id: string;
+  isDelete?: number;
+  isPublic?: number;
+  public: boolean;
+  templateName: string;
+  templateUrl: string;
+  userId: string;
+  [property: string]: any;
+}
+interface Response {
+  /**
+   * template的json
+   */
+  data: Datum[];
+  [property: string]: any;
+}
+const templateData = ref<Datum[]>([]);
+onMounted(() => {
+  get('/template/all', {}, (res: Response) => {
+    console.log('/template/all');
+    console.log(res);
+    templateData.value = res.data;
+  });
+});
 interface materialTypeI {
   value: string;
   label: string;
@@ -99,7 +155,25 @@ const beforeClearTip = (tmplUrl: string) => {
     onOk: () => getTempData(tmplUrl),
   });
 };
-
+const beforeClearTipAPI = (tmpId: string) => {
+  post(
+    '/template/data',
+    { id: tmpId },
+    (res: any) => {
+      console.log(res);
+      Modal.confirm({
+        title: t('tip'),
+        content: `<p>${t('replaceTip')}</p>`,
+        okText: t('ok'),
+        cancelText: t('cancel'),
+        onOk: () => getTempData(res.file),
+      });
+    },
+    (err) => {
+      console.log('err:' + err);
+    }
+  );
+};
 // 获取模板数据
 const getTempData = (tmplUrl: string) => {
   Spin.show({

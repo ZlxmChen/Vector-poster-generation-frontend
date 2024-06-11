@@ -289,7 +289,7 @@ class ServersPlugin {
         // 老项目
         //更新照片
         const formData = new FormData();
-        formData.append('img', await this.compressImage(await this.getImgFile(), 800, 800));
+        formData.append('img', await this.compressImage(await this.getImgFile(), 400, 400));
         formData.append('id', userStore.user.id.toString());
 
         postFormData('/project/img', formData, async (res2: any) => {

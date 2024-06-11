@@ -69,8 +69,7 @@ const cbMap = {
     type.value = 0;
   },
   modifyTemplateName() {
-    modal.value = true;
-    type.value = 1;
+    canvasEditor.saveTemplate();
   },
 };
 
