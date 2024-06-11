@@ -2,6 +2,7 @@
   <div class="layout" ref="vantaRef">
     <n-layout has-sider>
       <n-layout-sider
+        class="side-bar"
         collapse-mode="width"
         :collapsed-width="15"
         :width="300"
@@ -64,7 +65,7 @@
           </p>
         </div>
       </n-layout-sider>
-      <n-layout style="margin-left: 10px">
+      <n-layout style="padding-left: 10px">
         <RouterView />
       </n-layout>
     </n-layout>
@@ -223,5 +224,26 @@ const menuOptions = [
   .avatar {
     margin-right: 20px;
   }
+}
+.side-bar {
+  /* global 94%+ browsers support */
+  // background: linear-gradient(32deg, #fff1eb 0%, #ace0f9 100%),
+  //   linear-gradient(90deg, #fff1eb 0%, #ace0f9 100%);
+
+  // /* safari 5.1+,chrome 10+ */
+  // background: -webkit-linear-gradient(32deg, #fff1eb 0%, #ace0f9 100%),
+  //   -webkit-linear-gradient(90deg, #fff1eb 0%, #ace0f9 100%);
+
+  // /* ff 3.6+ */
+  // background: -moz-linear-gradient(32deg, #fff1eb 0%, #ace0f9 100%),
+  //   -moz-linear-gradient(90deg, #fff1eb 0%, #ace0f9 100%);
+
+  // /* opera 11.10+ */
+  // background: -o-linear-gradient(32deg, #fff1eb 0%, #ace0f9 100%),
+  //   -o-linear-gradient(90deg, #fff1eb 0%, #ace0f9 100%);
+
+  // /* ie 10+ */
+  // background: -ms-linear-gradient(32deg, #fff1eb 0%, #ace0f9 100%),
+  //   -ms-linear-gradient(90deg, #fff1eb 0%, #ace0f9 100%);
 }
 </style>

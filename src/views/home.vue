@@ -467,10 +467,29 @@ const goTemplate = () => {
 
 <style lang="scss" scoped>
 .homepage {
+  /* global 94%+ browsers support */
+  background: linear-gradient(32deg, #fff1eb 0%, #ace0f9 100%),
+    linear-gradient(90deg, #fff1eb 0%, #ace0f9 100%);
+
+  /* safari 5.1+,chrome 10+ */
+  background: -webkit-linear-gradient(32deg, #fff1eb 0%, #ace0f9 100%),
+    -webkit-linear-gradient(90deg, #fff1eb 0%, #ace0f9 100%);
+
+  /* ff 3.6+ */
+  background: -moz-linear-gradient(32deg, #fff1eb 0%, #ace0f9 100%),
+    -moz-linear-gradient(90deg, #fff1eb 0%, #ace0f9 100%);
+
+  /* opera 11.10+ */
+  background: -o-linear-gradient(32deg, #fff1eb 0%, #ace0f9 100%),
+    -o-linear-gradient(90deg, #fff1eb 0%, #ace0f9 100%);
+
+  /* ie 10+ */
+  background: -ms-linear-gradient(32deg, #fff1eb 0%, #ace0f9 100%),
+    -ms-linear-gradient(90deg, #fff1eb 0%, #ace0f9 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-right: 20px;
+  padding-right: 20px;
   .search-page {
     margin-top: 20px;
     width: 95%;
@@ -577,7 +596,7 @@ const goTemplate = () => {
 }
 .project-block {
   height: 300px;
-  width: 50vw;
+  width: 45vw;
   border-radius: 20px;
   background-color: #f2f3f5;
   margin-right: 20px;
@@ -632,7 +651,7 @@ const goTemplate = () => {
 }
 .template-block {
   height: 300px;
-  width: 50vw;
+  width: 45vw;
   border-radius: 20px;
   background-color: #f2f3f5;
   margin-left: 20px;
