@@ -259,20 +259,20 @@ const settings = ref({
 const breakpoints = ref({
   // 700px and up
   700: {
-    itemsToShow: 2.2,
+    itemsToShow: 1.7,
     snapAlign: 'center',
   },
   800: {
-    itemsToShow: 3.2,
+    itemsToShow: 2.7,
     snapAlign: 'center',
   },
   900: {
-    itemsToShow: 4.2,
+    itemsToShow: 3.7,
     snapAlign: 'center',
   },
   // 1024 and up
   1024: {
-    itemsToShow: 5.2,
+    itemsToShow: 4.7,
     snapAlign: 'center',
   },
 });

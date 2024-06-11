@@ -547,7 +547,7 @@ const generatePoster = () => {
   }
   let randomInt = Math.floor(Math.random() * 200) + 100;
   intervalId = setInterval(() => {
-    genView.percent += 1;
+    genView.percent += 4;
     if (genView.percent >= 100) {
       genView.color = '#5cb85c';
       clearInterval(intervalId);
