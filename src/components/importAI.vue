@@ -746,6 +746,7 @@ const saveElement = async () => {
     await postFormData('/element/upload', formData2, async (res2: any) => {
       var svgUrl = res2.filePath;
       console.log(res2);
+      Message.info('保存中，请稍后');
       post(
         '/element/save',
         {

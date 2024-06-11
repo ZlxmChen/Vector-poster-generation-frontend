@@ -111,6 +111,7 @@ export const useUserStore = defineStore('user', () => {
   };
   const uploadProject = () => {
     console.log(editingProject.value);
+    Message.info('保存中，请稍后');
     post(
       '/project/modify',
       {
@@ -135,6 +136,7 @@ export const useUserStore = defineStore('user', () => {
     );
   };
   const saveTemplate = () => {
+    Message.info('模板创建中，请稍后');
     post(
       '/template/create',
       {
