@@ -658,10 +658,69 @@ function dataUrlToFile(dataUrl: string, filename: string): File {
 
   return new File([u8arr], filename, { type: mime });
 }
+
+async function compressImage(file: File, maxWidth: number, maxHeight: number): Promise<File> {
+  return new Promise<File>((resolve, reject) => {
+    const img = new Image();
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      img.src = event.target?.result as string;
+
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        if (!ctx) {
+          reject(new Error('Canvas context is null'));
+          return;
+        }
+
+        // Calculate the new dimensions while maintaining the aspect ratio
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth || height > maxHeight) {
+          const aspectRatio = width / height;
+          if (width > height) {
+            width = maxWidth;
+            height = maxWidth / aspectRatio;
+          } else {
+            height = maxHeight;
+            width = maxHeight * aspectRatio;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const compressedFile = new File([blob], file.name, { type: 'image/png' });
+            resolve(compressedFile);
+          } else {
+            reject(new Error('Compression failed'));
+          }
+        }, 'image/png');
+      };
+
+      img.onerror = (error) => {
+        reject(error);
+      };
+    };
+
+    reader.onerror = (error) => {
+      reject(error);
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
 const saveElement = async () => {
   //TODO
   // 1. 将SVG URL转换为PNG数据URL
-  const pngDataUrl = await svgUrlToPng(genView.output, 600, 600);
+  const pngDataUrl = await svgUrlToPng(genView.output, 400, 400);
 
   // 2. 将PNG数据URL转换为File对象
   const pngFile = dataUrlToFile(pngDataUrl, 'image.png');
@@ -670,13 +729,13 @@ const saveElement = async () => {
   const formData = new FormData();
   formData.append('file', pngFile);
   formData.append('fileName', 'png');
-  await post('/element/upload', formData, async (res: any) => {
+  await postFormData('/element/upload', formData, async (res: any) => {
     var pngUrl = res.res;
     const formData2 = new FormData();
     const svgfile = await fetchSvgAsFile(genView.output, 'image.svg');
     formData2.append('file', svgfile);
     formData2.append('fileName', 'svg');
-    await post('/element/upload', formData, async (res2: any) => {
+    await postFormData('/element/upload', formData2, async (res2: any) => {
       var svgUrl = res.res;
       post('/element/save', {
         fileName: 'element',

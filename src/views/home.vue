@@ -5,7 +5,7 @@
       <span class="text-color-gradient">设计</span>
       什么？
     </div>
-    <p>使用Canva可画，轻松创建专业设计，还能将其分享或打印。</p>
+    <p>使用易颜，轻松创建专业设计，还能将其分享或打印。</p>
     <n-space>
       <n-button tertiary circle type="info" @click="searchModal = !searchModal">
         <template #icon>
@@ -241,17 +241,19 @@ const breakpoints = ref({
   },
 });
 const searchProjectPageIndex = ref(1);
+const searchProjectList = ref([]);
 const searchProject = computed(() => {
   //显示projectList中前10个数据
-  return projectList.value.slice(
+  return searchProjectList.value.slice(
     0 + 10 * (searchProjectPageIndex.value - 1),
     10 * searchProjectPageIndex.value
   );
 });
 const searchTemplatePageIndex = ref(1);
+const searchTemplateList = ref([]);
 const searchTemplate = computed(() => {
   //显示projectList中前10个数据
-  return myTemplateList.value.slice(
+  return searchTemplateList.value.slice(
     0 + 10 * (searchTemplatePageIndex.value - 1),
     10 * searchTemplatePageIndex.value
   );
@@ -261,7 +263,9 @@ const searchValue = ref('');
 const search = () => {
   searchModal2.value = true;
   console.log(searchValue.value);
-  post('/template/search', { value: searchValue.value, pageNo: 1 }, (res) => {});
+  post('/template/search', { value: searchValue.value, pageNo: 1 }, (res) => {
+    searchTemplateList.value = res.list;
+  });
 };
 const slides = ref([
   {
