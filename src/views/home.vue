@@ -105,14 +105,14 @@
     <div class="project">
       <div class="project-block">
         <Carousel>
-          <Slide v-for="project in projectList.slice(0, 10)" :key="project.id">
+          <Slide v-for="project in formatedProjectList.slice(0, 10)" :key="project.id">
             <div class="slide-card-project">
               <img class="slide-img-project" :src="project.projectUrl" alt="" />
               <div>
                 <h2>{{ project.projectName }}</h2>
                 <p>
                   最后编辑时间：
-                  <span style="color: #666666">{{ project.editTime }}</span>
+                  <span style="color: #666666">{{ project.formattedEditTime }}</span>
                 </p>
                 <n-button
                   icon-placement="right"
@@ -166,14 +166,14 @@
       </div>
       <div class="template-block">
         <Carousel>
-          <Slide v-for="template in myTemplateList.slice(0, 10)" :key="template.id">
+          <Slide v-for="template in formatedTemplateList.slice(0, 10)" :key="template.id">
             <div class="slide-card-template">
               <img class="slide-img-template" :src="template.templateUrl" alt="" />
               <div>
                 <h2>{{ template.templateName }}</h2>
                 <p>
                   创建时间：
-                  <span style="color: #666666">{{ template.createTime }}</span>
+                  <span style="color: #666666">{{ template.formattedCreateTime }}</span>
                 </p>
                 <n-button
                   icon-placement="right"
@@ -218,9 +218,21 @@ const router = useRouter();
 import { useLayoutStore } from '@/stores/layout.ts';
 import { useUserStore } from '@/stores/userStore';
 import { Message } from 'view-ui-plus';
+import { formatTimestamp } from '@/utils/utils';
 const userStore = useUserStore();
 const layoutStore = useLayoutStore();
-
+const formatedTemplateList = computed(() => {
+  return myTemplateList.value.map((item) => ({
+    ...item,
+    formattedCreateTime: formatTimestamp(item.createTime),
+  }));
+});
+const formatedProjectList = computed(() => {
+  return projectList.value.map((item) => ({
+    ...item,
+    formattedEditTime: formatTimestamp(item.editTime),
+  }));
+});
 const searchModal = ref(false);
 const searchModal2 = ref(false);
 onMounted(() => {

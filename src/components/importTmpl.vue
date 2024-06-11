@@ -23,7 +23,7 @@
     <div :key="templateList.id" v-for="templateList in templateData">
       <Divider plain orientation="left">{{ templateList.folderName }}</Divider>
       <Tooltip
-        :content="temp.label"
+        :content="temp.templateName"
         v-for="(temp, i) in templateList.list"
         :key="`${i}-bai1-button`"
         placement="top"
